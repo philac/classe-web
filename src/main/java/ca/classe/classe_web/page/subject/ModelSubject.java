@@ -2,11 +2,20 @@ package ca.classe.classe_web.page.subject;
 
 import java.util.List;
 
+import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Subject;
+import ca.classe.classe_service.commun.ContexteApplicationUtils;
+import ca.classe.classe_service.entite.ServiceCompetency;
 import ca.classe.classe_service.entite.ServiceSubject;
 import ca.classe.classe_web.mvp.ModelBaseImpl;
 
 public class ModelSubject extends ModelBaseImpl<ServiceSubject>{
+	
+	private ServiceCompetency serviceCompetency;
+	
+	public ModelSubject() {
+		serviceCompetency = ContexteApplicationUtils.getService(ServiceCompetency.class);
+	}
 
 	public List<Subject> loadSubjects() {
 		return service.loadAll();
@@ -26,5 +35,9 @@ public class ModelSubject extends ModelBaseImpl<ServiceSubject>{
 
 	public Subject loadSubject(Integer subjectId) {
 		return service.loadByIdWithCompetencies(subjectId);
+	}
+
+	public void modify(Competency competency) {
+		serviceCompetency.Modify(competency);
 	}
 }

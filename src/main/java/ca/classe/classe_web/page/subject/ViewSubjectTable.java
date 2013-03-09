@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.vaadin.tokenfield.TokenComboBox;
 import org.vaadin.tokenfield.TokenField;
 
@@ -50,6 +51,8 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	private String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 	// Image as a file resource
 	private FileResource modifyIcon = new FileResource(new File(basepath + "/WEB-INF/images/icon_pencil.png"));
+	
+	private FileResource addIcon = new FileResource(new File(basepath + "/WEB-INF/images/plus.png"));
 
 	public ViewSubjectTable(BusEvenement busEvenement) {
 		super(busEvenement);
@@ -127,10 +130,18 @@ public class ViewSubjectTable extends ViewBaseImpl {
 				final HorizontalLayout hl = new HorizontalLayout();
 				final Subject subject = (Subject) itemId;
 
-				final Label label = new Label(getFormattedCompetencies(subject));
+				String formattedCompetencies = getFormattedCompetencies(subject);
+				final Label label = new Label(formattedCompetencies);
+				final Image addImage = new Image("add", addIcon);
+				if (StringUtils.isNotBlank(formattedCompetencies)) {
+					hl.addComponent(label);
+				} else {
+					hl.addComponent(addImage);
+				}
+				
 				final TokenField field = new TokenField();
 				final TokenComboBox cbx = extractCbxFromTokenField(field);
-				hl.addComponent(label);
+				
 				hl.addLayoutClickListener(new LayoutClickListener() {
 					
 					private static final long serialVersionUID = -73572737721639494L;
@@ -140,35 +151,43 @@ public class ViewSubjectTable extends ViewBaseImpl {
 						if (hl.getComponent(0).equals(label)) {
 							hl.replaceComponent(label, field);
 							field.setValue(subject.getCompetencies());
-							cbx.addBlurListener(new BlurListener() {
-								
-								private static final long serialVersionUID = -7453534976461633250L;
-	
-								@Override
-								public void blur(BlurEvent event) {
-									Set<Object> comps = (Set<Object>) field.getValue();
-									Set<Competency> competencies = new LinkedHashSet<Competency>();
-									for (Object comp : comps) {
-										Competency competency = null;
-										if (comp instanceof String) {
-											competency = new Competency();
-											competency.setName((String) comp);
-											competency.setSubject(subject);
-										} else if (comp instanceof Competency) {
-											competency = (Competency) comp;
-										}
-										if (competency != null) {
-											competencies.add(competency);
-										}
+						} else if (hl.getComponent(0).equals(addImage)) {
+							hl.replaceComponent(addImage, field);
+						}
+						
+						cbx.addBlurListener(new BlurListener() {
+							
+							private static final long serialVersionUID = -7453534976461633250L;
+
+							@Override
+							public void blur(BlurEvent event) {
+								Set<Object> comps = (Set<Object>) field.getValue();
+								Set<Competency> competencies = new LinkedHashSet<Competency>();
+								for (Object comp : comps) {
+									Competency competency = null;
+									if (comp instanceof String) {
+										competency = new Competency();
+										competency.setName((String) comp);
+										competency.setSubject(subject);
+									} else if (comp instanceof Competency) {
+										competency = (Competency) comp;
 									}
-									subject.setCompetencies(competencies);
+									if (competency != null) {
+										competencies.add(competency);
+									}
+								}
+								subject.setCompetencies(competencies);
+								if (subject.getCompetencies() == null || subject.getCompetencies().isEmpty()) {
+									hl.replaceComponent(field, addImage);
+								} else {
 									label.setValue(getFormattedCompetencies(subject));
 									hl.replaceComponent(field, label);
-									busEvenement.notifier(new EvenementModifySubject(subject));
-									
 								}
-							});
-						}
+
+								busEvenement.notifier(new EvenementModifySubject(subject));
+								
+							}
+						});
 					}
 				});
 				return hl;

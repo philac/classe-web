@@ -48,7 +48,7 @@ implements EvenementModifyCompetency.Observer {
 
 	@Override
 	public void onModifyCompetency(Competency competency) {
-		// TODO Faire une méthode dans le modèle pour modifer la compétence. 
+		model.modify(competency);
 	}
 
 }

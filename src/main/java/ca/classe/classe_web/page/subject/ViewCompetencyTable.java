@@ -55,6 +55,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 				final TextField field = new TextField();
 				final Competency competency = (Competency) itemId;
 				label.setValue(competency.getName());
+				layout.addComponent(label);
 				layout.addLayoutClickListener(new LayoutClickListener() {
 					
 					private static final long serialVersionUID = -4039136538572434269L;
