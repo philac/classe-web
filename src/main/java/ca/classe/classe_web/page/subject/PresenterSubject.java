@@ -1,16 +1,19 @@
 package ca.classe.classe_web.page.subject;
 
+import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Subject;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.PresenterBase;
 import ca.classe.classe_web.page.enums.PageNames;
+import ca.classe.classe_web.page.subject.evenement.EvenementModifyCompetency;
 
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.VerticalLayout;
 
 public class PresenterSubject extends
-		PresenterBase<ModelSubject, ViewCompetencyTable> {
+		PresenterBase<ModelSubject, ViewCompetencyTable> 
+implements EvenementModifyCompetency.Observer {
 	
 	private Subject subject;
 	private ViewModifySubject viewModifySubject;
@@ -23,7 +26,7 @@ public class PresenterSubject extends
 
 	@Override
 	protected void observer() {
-		
+		busEvenement.observer(EvenementModifyCompetency.TYPE, this);
 	}
 
 	@Override
@@ -41,6 +44,11 @@ public class PresenterSubject extends
 	public void setSubject(Integer subjectId, com.vaadin.server.Page parentPage) {
 		subject = model.loadSubject(subjectId);
 		parentPage.setTitle(PageNames.MODIFY.getTitle() + " de la matière " + subject.getName());		
+	}
+
+	@Override
+	public void onModifyCompetency(Competency competency) {
+		// TODO Faire une méthode dans le modèle pour modifer la compétence. 
 	}
 
 }
