@@ -27,4 +27,10 @@ public class ServiceCompetencyImpl extends ServiceBaseImpl implements
 		daoCompetency.modifier(competency);
 	}
 
+	@Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public void delete(Competency competency) {
+		daoCompetency.supprimer(competency);
+	}
+
 }

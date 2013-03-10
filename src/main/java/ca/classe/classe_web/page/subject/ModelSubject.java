@@ -49,4 +49,9 @@ public class ModelSubject extends ModelBaseImpl<ServiceSubject>{
 		}
 		return singleton;
 	}
+
+	public void delete(Competency competency) {
+		serviceCompetency.delete(competency);
+		
+	}
 }

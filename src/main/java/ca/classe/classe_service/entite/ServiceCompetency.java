@@ -7,4 +7,6 @@ public interface ServiceCompetency extends ServiceBase {
 
 	void Modify(Competency competency);
 
+	void delete(Competency competency);
+
 }

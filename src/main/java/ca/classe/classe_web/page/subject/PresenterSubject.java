@@ -5,6 +5,7 @@ import ca.classe.classe_modele.Subject;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.PresenterBase;
 import ca.classe.classe_web.page.enums.PageNames;
+import ca.classe.classe_web.page.subject.evenement.EvenementDeleteCompetency;
 import ca.classe.classe_web.page.subject.evenement.EvenementModifyCompetency;
 
 import com.vaadin.ui.Label;
@@ -13,7 +14,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class PresenterSubject extends
 		PresenterBase<ModelSubject, ViewCompetencyTable> 
-implements EvenementModifyCompetency.Observer {
+implements EvenementModifyCompetency.Observer, EvenementDeleteCompetency.Observer {
 	
 	private Subject subject;
 	private ViewModifySubject viewModifySubject;
@@ -27,6 +28,7 @@ implements EvenementModifyCompetency.Observer {
 	@Override
 	protected void observer() {
 		busEvenement.observer(EvenementModifyCompetency.TYPE, this);
+		busEvenement.observer(EvenementDeleteCompetency.TYPE, this);
 	}
 
 	@Override
@@ -49,6 +51,13 @@ implements EvenementModifyCompetency.Observer {
 	@Override
 	public void onModifyCompetency(Competency competency) {
 		model.modify(competency);
+		view.displayTotal();
+	}
+
+	@Override
+	public void onDelete(Competency competency) {
+		model.delete(competency);
+		view.setEntities(model.loadSubject(subject.getId()).getCompetencies());
 	}
 
 }
