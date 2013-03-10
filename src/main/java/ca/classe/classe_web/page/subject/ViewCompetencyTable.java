@@ -29,6 +29,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 	
 	private Table table = new Table();
 	private BeanItemContainer<Competency> beanItemContainer = new BeanItemContainer<Competency>(Competency.class);
+	VerticalLayout verticalLayout;
 
 	public ViewCompetencyTable(BusEvenement busEvenement) {
 		super(busEvenement);
@@ -36,10 +37,17 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 
 	@Override
 	public Layout getLayout() {
-		VerticalLayout verticalLayout = new VerticalLayout();
-		initTable();
-		verticalLayout.addComponent(table);
+		init();
 		return verticalLayout;
+	}
+
+	private void init() {
+		if (!initialized) {
+			verticalLayout = new VerticalLayout();
+			initTable();
+			verticalLayout.addComponent(table);
+			initialized = true;
+		}		
 	}
 
 	private void initTable() {

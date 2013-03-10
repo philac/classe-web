@@ -2,6 +2,7 @@ package ca.classe.classe_service.entite;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -21,7 +22,7 @@ public class DaoSubjectImpl extends DaoBaseImpl<Subject, Integer> implements
 		CriteriaQuery<Subject> cq = cb.createQuery(Subject.class);
 		Root<Subject> root = cq.from(Subject.class);
 		
-		root.fetch(Subject_.competencies);
+		root.fetch(Subject_.competencies, JoinType.LEFT);
 		Predicate predicateId = cb.equal(root.get(Subject_.id), id);
 		cq.where(predicateId);
 		

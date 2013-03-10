@@ -7,6 +7,7 @@ import com.vaadin.ui.Layout;
 public abstract class ViewBaseImpl implements ViewBase {
 	
 	protected BusEvenement busEvenement;
+	protected boolean initialized = false;
 	
 	public ViewBaseImpl(BusEvenement busEvenement) {
 		this.busEvenement = busEvenement;

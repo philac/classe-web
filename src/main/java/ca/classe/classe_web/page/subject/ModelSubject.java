@@ -13,7 +13,9 @@ public class ModelSubject extends ModelBaseImpl<ServiceSubject>{
 	
 	private ServiceCompetency serviceCompetency;
 	
-	public ModelSubject() {
+	private static ModelSubject singleton = null;
+	
+	private ModelSubject() {
 		serviceCompetency = ContexteApplicationUtils.getService(ServiceCompetency.class);
 	}
 
@@ -39,5 +41,12 @@ public class ModelSubject extends ModelBaseImpl<ServiceSubject>{
 
 	public void modify(Competency competency) {
 		serviceCompetency.Modify(competency);
+	}
+	
+	public static ModelSubject getInstance() {
+		if (singleton == null) {
+			singleton = new ModelSubject();
+		}
+		return singleton;
 	}
 }

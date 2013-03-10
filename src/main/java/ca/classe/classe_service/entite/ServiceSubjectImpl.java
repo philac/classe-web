@@ -12,6 +12,7 @@ import ca.classe.classe_modele.Subject;
 import ca.classe.classe_service.ServiceBaseImpl;
 
 @Service
+@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 public class ServiceSubjectImpl extends ServiceBaseImpl implements
 		ServiceSubject {
 
@@ -23,24 +24,25 @@ public class ServiceSubjectImpl extends ServiceBaseImpl implements
 	}
 	
 	@Override
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
 	public List<Subject> loadAll() {
 		return daoSubject.chargerToutAvecAssociations();
 	}
 
 	@Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void add(Subject bean) {
 		daoSubject.ajouter(bean);
 	}
 
 	@Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void delete(Subject bean) {
 		daoSubject.supprimer(bean);
 	}
 
 	@Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void modify(Subject subject) {
 		daoSubject.modifier(subject);
 	}
@@ -51,6 +53,7 @@ public class ServiceSubjectImpl extends ServiceBaseImpl implements
 	}
 	
 	@Override
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
 	public Subject loadByIdWithCompetencies(Integer id) {
 		return daoSubject.loadByIdWithCompetencies(id);
 	}

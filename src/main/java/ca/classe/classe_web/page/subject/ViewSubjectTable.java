@@ -56,194 +56,200 @@ public class ViewSubjectTable extends ViewBaseImpl {
 
 	public ViewSubjectTable(BusEvenement busEvenement) {
 		super(busEvenement);
-		table = new Table("Matières");
 		layout = new VerticalLayout();
-		layout.addComponent(table);
+
 	}
 
 	public void init() {
-		table.setContainerDataSource(bicSubject);
-		table.addGeneratedColumn("delete", new ColumnGenerator() {
-			
-			private static final long serialVersionUID = 5725803838136084976L;
-
-			@Override
-			public Object generateCell(Table source, final Object itemId, Object columnId) {
-				Button delete = new Button("X");
-				delete.setData(itemId);
-				delete.addClickListener(new Button.ClickListener() {
-					
-					private static final long serialVersionUID = -7500287398111769642L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						busEvenement.notifier(new EvenementDeleteSubject((Subject) itemId));
-					}
-				});
-				return delete;
-			}
-		});
-		table.addGeneratedColumn(Subject_.name.getName(), new ColumnGenerator() {
-			
-			private static final long serialVersionUID = -5582612078498034364L;
-
-			@Override
-			public Object generateCell(Table source, Object itemId, Object columnId) {
-				final Subject subject = (Subject) itemId;
-				final Label label = new Label(subject.getName());
-				final HorizontalLayout hl = new HorizontalLayout();
-				final TextField field = new TextField();
-				hl.addComponent(label);
-				hl.addLayoutClickListener(new LayoutClickListener() {
-					
-					private static final long serialVersionUID = -2741245649978592560L;
-
-					@Override
-					public void layoutClick(LayoutClickEvent event) {
-						hl.replaceComponent(label, field);
-						field.setValue(subject.getName());
-						field.focus();
-						field.addBlurListener(new BlurListener() {
-							
-							private static final long serialVersionUID = 2103543258685792042L;
-
-							@Override
-							public void blur(BlurEvent event) {
-								subject.setName(field.getValue());
-								hl.removeAllComponents();
-								Label label2 = new Label(subject.getName());
-								hl.addComponent(label2);
-								busEvenement.notifier(new EvenementModifySubject(subject));
-							}
-						});
-					}
-				});
-				return hl;
-			}
-		});
-		table.addGeneratedColumn(Subject_.competencies.getName(), new ColumnGenerator() {
-			
-			private static final long serialVersionUID = -4139399975888872413L;
-
-			@Override
-			public Object generateCell(Table source, Object itemId, Object columnId) {
-				final HorizontalLayout hl = new HorizontalLayout();
-				final Subject subject = (Subject) itemId;
-
-				String formattedCompetencies = getFormattedCompetencies(subject);
-				final Label label = new Label(formattedCompetencies);
-				final Image addImage = new Image("add", addIcon);
-				if (StringUtils.isNotBlank(formattedCompetencies)) {
-					hl.addComponent(label);
-				} else {
-					hl.addComponent(addImage);
-				}
+		if (!initialized) {
+			table = new Table("Matières");
+			layout.addComponent(table);
+			table.setContainerDataSource(bicSubject);
+			table.addGeneratedColumn("delete", new ColumnGenerator() {
 				
-				final TokenField field = new TokenField();
-				final TokenComboBox cbx = extractCbxFromTokenField(field);
-				
-				hl.addLayoutClickListener(new LayoutClickListener() {
-					
-					private static final long serialVersionUID = -73572737721639494L;
-
-					@Override
-					public void layoutClick(LayoutClickEvent event) {
-						if (hl.getComponent(0).equals(label)) {
-							hl.replaceComponent(label, field);
-							field.setValue(subject.getCompetencies());
-						} else if (hl.getComponent(0).equals(addImage)) {
-							hl.replaceComponent(addImage, field);
-						}
+				private static final long serialVersionUID = 5725803838136084976L;
+	
+				@Override
+				public Object generateCell(Table source, final Object itemId, Object columnId) {
+					Button delete = new Button("X");
+					delete.setData(itemId);
+					delete.addClickListener(new Button.ClickListener() {
 						
-						cbx.addBlurListener(new BlurListener() {
-							
-							private static final long serialVersionUID = -7453534976461633250L;
-
-							@Override
-							public void blur(BlurEvent event) {
-								Set<Object> comps = (Set<Object>) field.getValue();
-								Set<Competency> competencies = new LinkedHashSet<Competency>();
-								for (Object comp : comps) {
-									Competency competency = null;
-									if (comp instanceof String) {
-										competency = new Competency();
-										competency.setName((String) comp);
-										competency.setSubject(subject);
-									} else if (comp instanceof Competency) {
-										competency = (Competency) comp;
-									}
-									if (competency != null) {
-										competencies.add(competency);
-									}
-								}
-								subject.setCompetencies(competencies);
-								if (subject.getCompetencies() == null || subject.getCompetencies().isEmpty()) {
-									hl.replaceComponent(field, addImage);
-								} else {
-									label.setValue(getFormattedCompetencies(subject));
-									hl.replaceComponent(field, label);
-								}
-
-								busEvenement.notifier(new EvenementModifySubject(subject));
+						private static final long serialVersionUID = -7500287398111769642L;
+	
+						@Override
+						public void buttonClick(ClickEvent event) {
+							busEvenement.notifier(new EvenementDeleteSubject((Subject) itemId));
+						}
+					});
+					return delete;
+				}
+			});
+			table.addGeneratedColumn(Subject_.name.getName(), new ColumnGenerator() {
+				
+				private static final long serialVersionUID = -5582612078498034364L;
+	
+				@Override
+				public Object generateCell(Table source, Object itemId, Object columnId) {
+					final Subject subject = (Subject) itemId;
+					final Label label = new Label(subject.getName());
+					final HorizontalLayout hl = new HorizontalLayout();
+					final TextField field = new TextField();
+					hl.addComponent(label);
+					hl.addLayoutClickListener(new LayoutClickListener() {
+						
+						private static final long serialVersionUID = -2741245649978592560L;
+	
+						@Override
+						public void layoutClick(LayoutClickEvent event) {
+							hl.replaceComponent(label, field);
+							field.setValue(subject.getName());
+							field.focus();
+							field.addBlurListener(new BlurListener() {
 								
-							}
-						});
+								private static final long serialVersionUID = 2103543258685792042L;
+	
+								@Override
+								public void blur(BlurEvent event) {
+									subject.setName(field.getValue());
+									hl.removeAllComponents();
+									Label label2 = new Label(subject.getName());
+									hl.addComponent(label2);
+									busEvenement.notifier(new EvenementModifySubject(subject));
+								}
+							});
+						}
+					});
+					return hl;
+				}
+			});
+			table.addGeneratedColumn(Subject_.competencies.getName(), new ColumnGenerator() {
+				
+				private static final long serialVersionUID = -4139399975888872413L;
+	
+				@Override
+				public Object generateCell(Table source, Object itemId, Object columnId) {
+					final HorizontalLayout hl = new HorizontalLayout();
+					final Subject subject = (Subject) itemId;
+	
+					String formattedCompetencies = getFormattedCompetencies(subject);
+					final Label label = new Label(formattedCompetencies);
+					final Image addImage = new Image();
+					addImage.setIcon(addIcon);
+					if (StringUtils.isNotBlank(formattedCompetencies)) {
+						hl.addComponent(label);
+					} else {
+						hl.addComponent(addImage);
 					}
-				});
-				return hl;
-			}
-
-			private String getFormattedCompetencies(Subject subject) {
-				StringBuilder content = new StringBuilder();
-				for (Competency competency : subject.getCompetencies()) {
-					content.append(competency.getName());
-					content.append(", ");
-				}
-				if ( content.lastIndexOf(",") > 0) {
-					content.delete(content.lastIndexOf(","), content.lastIndexOf(",") + 1);
-				}
-				return content.toString();
-			}
-
-			private TokenComboBox extractCbxFromTokenField(TokenField field) {
-				Iterator<Component> it = field.getLayout().iterator();
-				while (it.hasNext()) {
-					Component c = it.next();
-					if (c instanceof TokenComboBox) {
-						return (TokenComboBox) c;
-					}
-				}
-				return null;
-			}
-		});
-		table.addGeneratedColumn("modify", new ColumnGenerator() {
-			
-			private static final long serialVersionUID = -4238432792751556346L;
-
-			@Override
-			public Object generateCell(Table source, Object itemId, Object columnId) {
-				final Subject subject = (Subject) itemId;
-				Image modifyButton = new Image("pencil", modifyIcon);
-				modifyButton.addClickListener(new ClickListener() {
 					
-					private static final long serialVersionUID = 5082244489286145248L;
-
-					@Override
-					public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
-						busEvenement.notifier(new EvenementNavigateModifySubject(subject.getId()));
+					final TokenField field = new TokenField();
+					final TokenComboBox cbx = extractCbxFromTokenField(field);
+					
+					hl.addLayoutClickListener(new LayoutClickListener() {
+						
+						private static final long serialVersionUID = -73572737721639494L;
+	
+						@Override
+						public void layoutClick(LayoutClickEvent event) {
+							if (hl.getComponent(0).equals(label)) {
+								hl.replaceComponent(label, field);
+								field.setValue(subject.getCompetencies());
+							} else if (hl.getComponent(0).equals(addImage)) {
+								hl.replaceComponent(addImage, field);
+							}
+							
+							cbx.addBlurListener(new BlurListener() {
+								
+								private static final long serialVersionUID = -7453534976461633250L;
+	
+								@Override
+								public void blur(BlurEvent event) {
+									Set<Object> comps = (Set<Object>) field.getValue();
+									if (comps != null ) {
+										Set<Competency> competencies = new LinkedHashSet<Competency>();
+										for (Object comp : comps) {
+											Competency competency = null;
+											if (comp instanceof String) {
+												competency = new Competency();
+												competency.setName((String) comp);
+												competency.setSubject(subject);
+											} else if (comp instanceof Competency) {
+												competency = (Competency) comp;
+											}
+											if (competency != null) {
+												competencies.add(competency);
+											}
+										}
+										subject.setCompetencies(competencies);
+										busEvenement.notifier(new EvenementModifySubject(subject));
+										
+									}
+									if (comps == null || subject.getCompetencies() == null || subject.getCompetencies().isEmpty()) {
+										hl.replaceComponent(field, addImage);
+									} else {
+										label.setValue(getFormattedCompetencies(subject));
+										hl.replaceComponent(field, label);
+									}
+								}
+							});
+						}
+					});
+					return hl;
+				}
+	
+				private String getFormattedCompetencies(Subject subject) {
+					StringBuilder content = new StringBuilder();
+					for (Competency competency : subject.getCompetencies()) {
+						content.append(competency.getName());
+						content.append(", ");
 					}
-				});
-				return modifyButton;
-			}
-		});
-		table.setVisibleColumns(new Object[] {Subject_.name.getName(), Subject_.competencies.getName(), "modify", "delete"});
-		table.setColumnHeaders(new String[] {"nom", "compétence", "", ""});
-		table.setColumnWidth(Subject_.name.getName(), 100);
-		table.setColumnWidth(Subject_.competencies, 450);
-		table.setColumnWidth("delete", 50);
-		table.setColumnWidth("modify", 50);
-		table.setPageLength(10);
-		table.setWidth(100, Unit.PERCENTAGE);
+					if ( content.lastIndexOf(",") > 0) {
+						content.delete(content.lastIndexOf(","), content.lastIndexOf(",") + 1);
+					}
+					return content.toString();
+				}
+	
+				private TokenComboBox extractCbxFromTokenField(TokenField field) {
+					Iterator<Component> it = field.getLayout().iterator();
+					while (it.hasNext()) {
+						Component c = it.next();
+						if (c instanceof TokenComboBox) {
+							return (TokenComboBox) c;
+						}
+					}
+					return null;
+				}
+			});
+			table.addGeneratedColumn("modify", new ColumnGenerator() {
+				
+				private static final long serialVersionUID = -4238432792751556346L;
+	
+				@Override
+				public Object generateCell(Table source, Object itemId, Object columnId) {
+					final Subject subject = (Subject) itemId;
+					Image modifyButton = new Image("", modifyIcon);
+					modifyButton.addClickListener(new ClickListener() {
+						
+						private static final long serialVersionUID = 5082244489286145248L;
+	
+						@Override
+						public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
+							busEvenement.notifier(new EvenementNavigateModifySubject(subject.getId()));
+						}
+					});
+					return modifyButton;
+				}
+			});
+			table.setVisibleColumns(new Object[] {Subject_.name.getName(), Subject_.competencies.getName(), "modify", "delete"});
+			table.setColumnHeaders(new String[] {"nom", "compétence", "", ""});
+			table.setColumnWidth(Subject_.name.getName(), 100);
+			table.setColumnWidth(Subject_.competencies, 450);
+			table.setColumnWidth("delete", 50);
+			table.setColumnWidth("modify", 50);
+			table.setPageLength(10);
+			table.setWidth(100, Unit.PERCENTAGE);
+			initialized = true;
+		}
 	}
 
 	@Override

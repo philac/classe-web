@@ -18,12 +18,18 @@ public class ViewAddSubject extends AddingView<Subject> {
 	
 	public ViewAddSubject(BusEvenement busEvenement) {
 		super(busEvenement);
-		nameField.setNullRepresentation("");
-		addField("Nom", nameField);
 		init();
 	}
 	
-	
+	@Override
+	protected void init() {
+		if (!initialized) {
+			nameField.setNullRepresentation("");
+			addField("Nom", nameField);
+			super.init();
+			initialized = true;
+		}
+	}
 
 	@Override
 	protected Evenement<EvenementAddSubject.Observer> getAddEvent() {
@@ -47,7 +53,6 @@ public class ViewAddSubject extends AddingView<Subject> {
 	@Override
 	public void reinitFields() {
 		nameField.setValue(null);
-		bindData();
 	}
 
 }
