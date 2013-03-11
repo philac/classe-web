@@ -4,6 +4,7 @@ import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.page.subject.ModelSubject;
 import ca.classe.classe_web.page.subject.PresenterSubject;
 import ca.classe.classe_web.page.subject.PresenterSubjects;
+import ca.classe.classe_web.page.subject.ViewAddCompetency;
 import ca.classe.classe_web.page.subject.ViewCompetencyTable;
 import ca.classe.classe_web.page.subject.ViewModifySubject;
 import ca.classe.classe_web.page.subject.ViewSubjectTable;
@@ -39,7 +40,7 @@ public class PresenterFactory {
 	
 	private PresenterSubject getInstancePresenterSubject() {
 		if (presenterSubject == null) {
-			presenterSubject = new PresenterSubject(ModelSubject.getInstance(), new ViewCompetencyTable(busEvenement), new ViewModifySubject(busEvenement), busEvenement);
+			presenterSubject = new PresenterSubject(ModelSubject.getInstance(), new ViewCompetencyTable(busEvenement), new ViewModifySubject(busEvenement), new ViewAddCompetency(busEvenement), busEvenement);
 		}
 		
 		return presenterSubject;
