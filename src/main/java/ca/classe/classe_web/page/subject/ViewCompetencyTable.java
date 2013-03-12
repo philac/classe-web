@@ -58,6 +58,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 	}
 
 	private void init() {
+
 		if (!initialized) {
 			verticalLayout = new VerticalLayout();
 			initTable();
@@ -117,7 +118,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 				addImage.setIcon(addIcon);
 				final TextField field = new TextField();
 				if (StringUtils.isNotBlank(competency.getDescription())) {
-					layout.addComponent(layout);
+					layout.addComponent(label);
 				} else {
 					layout.addComponent(addImage);
 				}
@@ -142,7 +143,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 
 					@Override
 					public void blur(BlurEvent event) {
-						if (StringUtils.isBlank(field.getValue())) {
+						if (StringUtils.isNotBlank(field.getValue())) {
 							swapComponents(layout, field, label);
 						} else {
 							layout.replaceComponent(field, addImage);
@@ -266,6 +267,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 	}
 	
 	private void initWeightTotalMap() {
+		weightValues.clear();
 		for (Competency competency : beanItemContainer.getItemIds()) {
 			weightValues.put(competency.getId(), competency.getWeight());
 		}

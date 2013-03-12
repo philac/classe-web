@@ -35,8 +35,8 @@ public class ViewModifySubject extends ViewBaseImpl {
 	}
 
 	private HorizontalLayout init() {
+		label.setValue(subject.getName());
 		if (!initialized) {
-			label.setValue(subject.getName());
 			layout.addComponent(label);
 			layout.addLayoutClickListener(new LayoutClickListener() {
 				
