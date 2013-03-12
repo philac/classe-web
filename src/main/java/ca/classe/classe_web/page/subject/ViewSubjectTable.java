@@ -115,7 +115,7 @@ public class ViewSubjectTable extends ViewBaseImpl {
 									hl.removeAllComponents();
 									Label label2 = new Label(subject.getName());
 									hl.addComponent(label2);
-									busEvenement.notifier(new EvenementModifySubject(subject));
+									busEvenement.notifier(new EvenementModifySubject(ViewSubjectTable.this, subject));
 								}
 							});
 						}
@@ -181,7 +181,7 @@ public class ViewSubjectTable extends ViewBaseImpl {
 											}
 										}
 										subject.setCompetencies(competencies);
-										busEvenement.notifier(new EvenementModifySubject(subject));
+										busEvenement.notifier(new EvenementModifySubject(ViewSubjectTable.this, subject));
 										
 									}
 									if (comps == null || subject.getCompetencies() == null || subject.getCompetencies().isEmpty()) {

@@ -65,7 +65,9 @@ EvenementModifySubject.Observer
 	}
 
 	@Override
-	public void onModify(Subject subject) {
-		model.modify(subject);
+	public void onModify(Object source, Subject subject) {
+		if (source.equals(view)) {
+			model.modify(subject);
+		}
 	}
 }

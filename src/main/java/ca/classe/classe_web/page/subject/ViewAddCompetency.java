@@ -48,7 +48,7 @@ public class ViewAddCompetency extends AddingView<Competency> {
 	protected Evenement<?> getAddEvent() {
 		subject.getCompetencies().add(beanItem.getBean());
 		beanItem.getBean().setSubject(subject);
-		return new EvenementModifySubject(subject);
+		return new EvenementModifySubject(this, subject);
 	}
 
 	@Override

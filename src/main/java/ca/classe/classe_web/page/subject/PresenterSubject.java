@@ -5,6 +5,7 @@ import ca.classe.classe_modele.Subject;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.PresenterBase;
 import ca.classe.classe_web.page.enums.PageNames;
+import ca.classe.classe_web.page.subject.evenement.EvenementCancel;
 import ca.classe.classe_web.page.subject.evenement.EvenementDeleteCompetency;
 import ca.classe.classe_web.page.subject.evenement.EvenementModifyCompetency;
 import ca.classe.classe_web.page.subject.evenement.EvenementModifySubject;
@@ -15,7 +16,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class PresenterSubject extends
 		PresenterBase<ModelSubject, ViewCompetencyTable> 
-implements EvenementModifyCompetency.Observer, EvenementDeleteCompetency.Observer, EvenementModifySubject.Observer {
+implements EvenementModifyCompetency.Observer, EvenementDeleteCompetency.Observer, EvenementModifySubject.Observer, EvenementCancel.Observer {
 	
 	private Subject subject;
 	private ViewModifySubject viewModifySubject;
@@ -33,6 +34,7 @@ implements EvenementModifyCompetency.Observer, EvenementDeleteCompetency.Observe
 		busEvenement.observer(EvenementModifyCompetency.TYPE, this);
 		busEvenement.observer(EvenementDeleteCompetency.TYPE, this);
 		busEvenement.observer(EvenementModifySubject.TYPE, this);
+		busEvenement.observer(EvenementCancel.TYPE, this);
 	}
 
 	@Override
@@ -66,12 +68,25 @@ implements EvenementModifyCompetency.Observer, EvenementDeleteCompetency.Observe
 	public void onDelete(Competency competency) {
 		model.delete(competency);
 		view.setEntities(model.loadSubject(subject.getId()).getCompetencies());
+		viewAddCompetency.setSubject(model.loadSubject(subject.getId()));
 	}
 
 	@Override
-	public void onModify(Subject subject) {
-		model.modify(subject);
-		view.setEntities(subject.getCompetencies());
+	public void onModify(Object source, Subject subject) {
+		if (source.equals(viewModifySubject)) {
+			subject.setCompetencies(model.loadSubject(subject.getId()).getCompetencies());
+			model.modify(subject);
+			viewModifySubject.setEntity(model.loadSubject(subject.getId()));
+		} else if (source.equals(viewAddCompetency)) {
+			model.modify(subject);
+			view.setEntities(model.loadSubject(subject.getId()).getCompetencies());
+			viewAddCompetency.reinitFields();
+		}
+	}
+
+	@Override
+	public void onCancel() {
+		viewAddCompetency.reinitFields();
 	}
 
 }

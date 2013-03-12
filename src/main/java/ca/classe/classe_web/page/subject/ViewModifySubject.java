@@ -55,7 +55,7 @@ public class ViewModifySubject extends ViewBaseImpl {
 							layout.replaceComponent(field, label);
 							label.setValue(field.getValue());
 							subject.setName(label.getValue());
-							busEvenement.notifier(new EvenementModifySubject(subject));
+							busEvenement.notifier(new EvenementModifySubject(ViewModifySubject.this, subject));
 						}
 					});
 				}

@@ -7,13 +7,15 @@ import ca.classe.classe_service.commun.TypeEvenement;
 public class EvenementModifySubject implements Evenement<EvenementModifySubject.Observer> {
 
 	public interface Observer {
-		void onModify(Subject subject);
+		void onModify(Object source, Subject subject);
 	}
 
 	private Subject subject;
+	private Object source;
 	public final static TypeEvenement<Observer> TYPE = new TypeEvenement<Observer>();
 	
-	public EvenementModifySubject(Subject subject) {
+	public EvenementModifySubject(Object source, Subject subject) {
+		this.source = source;
 		this.subject = subject;
 	}
 	
@@ -24,7 +26,7 @@ public class EvenementModifySubject implements Evenement<EvenementModifySubject.
 
 	@Override
 	public void notifierObservateur(Observer observer) {
-		observer.onModify(subject);
+		observer.onModify(source, subject);
 	}
 
 }
