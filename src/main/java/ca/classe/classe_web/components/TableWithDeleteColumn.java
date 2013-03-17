@@ -33,8 +33,9 @@ public class TableWithDeleteColumn extends Table {
 			private static final long serialVersionUID = 5725803838136084976L;
 
 			@Override
-			public Object generateCell(Table source, final Object itemId, Object columnId) {
-				Button delete = new Button("X");
+			public Object generateCell(Table source, Object itemId, Object columnId) {
+				final Button delete = new Button("X");
+				delete.addStyleName("deleteBtn");
 				delete.setData(itemId);
 				delete.addClickListener(new Button.ClickListener() {
 					
@@ -42,11 +43,9 @@ public class TableWithDeleteColumn extends Table {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						onButtonClickEvent.execute(itemId);
-						busEvenement.notifier(deleteEvent.getDeleteEvent(itemId));
+						onButtonClickEvent.execute(delete.getData());
+						busEvenement.notifier(deleteEvent.getDeleteEvent(delete.getData()));
 					}
-
-
 				});
 				return delete;
 			}
