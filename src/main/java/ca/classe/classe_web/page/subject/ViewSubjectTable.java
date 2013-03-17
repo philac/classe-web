@@ -14,6 +14,9 @@ import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Subject;
 import ca.classe.classe_modele.Subject_;
 import ca.classe.classe_service.commun.BusEvenement;
+import ca.classe.classe_web.components.TableWithDeleteColumn;
+import ca.classe.classe_web.components.events.DeleteEvent;
+import ca.classe.classe_web.components.events.OnButtonClickEvent;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
 import ca.classe.classe_web.page.subject.evenement.EvenementDeleteSubject;
 import ca.classe.classe_web.page.subject.evenement.EvenementModifySubject;
@@ -28,8 +31,6 @@ import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.VaadinService;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -44,7 +45,7 @@ public class ViewSubjectTable extends ViewBaseImpl {
 
 	private static final long serialVersionUID = -2906930327616159639L;
 	
-	private Table table;
+	private TableWithDeleteColumn table;
 	private VerticalLayout layout;
 	BeanItemContainer<Subject> bicSubject = new BeanItemContainer<Subject>(Subject.class);
 	// Find the application directory
@@ -57,35 +58,25 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	public ViewSubjectTable(BusEvenement busEvenement) {
 		super(busEvenement);
 		layout = new VerticalLayout();
-
+		table = new TableWithDeleteColumn("Matières",
+				busEvenement, new DeleteEvent() {
+					
+					@Override
+					public EvenementDeleteSubject getDeleteEvent(Object itemId) {
+						return new EvenementDeleteSubject((Subject) itemId);
+					}
+				}, new OnButtonClickEvent() {
+					@Override
+					public void execute(Object itemId) {
+					}
+				});
 	}
 
 	public void init() {
 		if (!initialized) {
-			table = new Table("Matières");
-			table.setSizeUndefined();
+			table.initTable();
 			layout.addComponent(table);
 			table.setContainerDataSource(bicSubject);
-			table.addGeneratedColumn("delete", new ColumnGenerator() {
-				
-				private static final long serialVersionUID = 5725803838136084976L;
-	
-				@Override
-				public Object generateCell(Table source, final Object itemId, Object columnId) {
-					Button delete = new Button("X");
-					delete.setData(itemId);
-					delete.addClickListener(new Button.ClickListener() {
-						
-						private static final long serialVersionUID = -7500287398111769642L;
-	
-						@Override
-						public void buttonClick(ClickEvent event) {
-							busEvenement.notifier(new EvenementDeleteSubject((Subject) itemId));
-						}
-					});
-					return delete;
-				}
-			});
 			table.addGeneratedColumn(Subject_.name.getName(), new ColumnGenerator() {
 				
 				private static final long serialVersionUID = -5582612078498034364L;

@@ -11,6 +11,9 @@ import org.apache.commons.lang.Validate;
 import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Competency_;
 import ca.classe.classe_service.commun.BusEvenement;
+import ca.classe.classe_web.components.TableWithDeleteColumn;
+import ca.classe.classe_web.components.events.DeleteEvent;
+import ca.classe.classe_web.components.events.OnButtonClickEvent;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
 import ca.classe.classe_web.page.subject.evenement.EvenementDeleteCompetency;
 import ca.classe.classe_web.page.subject.evenement.EvenementModifyCompetency;
@@ -25,8 +28,6 @@ import com.vaadin.server.FileResource;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.UserError;
 import com.vaadin.server.VaadinService;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -39,7 +40,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class ViewCompetencyTable extends ViewBaseImpl {
 	
-	private Table table = new Table("Compétences");
+	private TableWithDeleteColumn table;
 	private BeanItemContainer<Competency> beanItemContainer = new BeanItemContainer<Competency>(Competency.class);
 	private VerticalLayout verticalLayout;
 	// Find the application directory
@@ -49,6 +50,19 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 
 	public ViewCompetencyTable(BusEvenement busEvenement) {
 		super(busEvenement);
+		table = new TableWithDeleteColumn("Compétences", busEvenement, new DeleteEvent() {
+			
+			@Override
+			public EvenementDeleteCompetency getDeleteEvent(Object itemId) {
+				return 	new EvenementDeleteCompetency((Competency) itemId);
+			}
+		}, new OnButtonClickEvent() {
+			
+			@Override
+			public void execute(Object itemId) {
+				weightValues.remove(((Competency) itemId).getId());
+			}
+		});
 	}
 
 	@Override
@@ -68,6 +82,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 	}
 
 	private void initTable() {
+		table.initTable();
 		table.setHeight(-1, Unit.PIXELS);
 		table.setWidth(95, Unit.PERCENTAGE);
 		
@@ -224,27 +239,6 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 				});
 				
 				return layout;
-			}
-		});
-		table.addGeneratedColumn("delete", new ColumnGenerator() {
-			
-			private static final long serialVersionUID = 5725803838136084976L;
-
-			@Override
-			public Object generateCell(Table source, final Object itemId, Object columnId) {
-				Button delete = new Button("X");
-				delete.setData(itemId);
-				delete.addClickListener(new Button.ClickListener() {
-					
-					private static final long serialVersionUID = -7500287398111769642L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						weightValues.remove(((Competency) itemId).getId());
-						busEvenement.notifier(new EvenementDeleteCompetency((Competency) itemId));
-					}
-				});
-				return delete;
 			}
 		});
 		table.setFooterVisible(true);
