@@ -68,7 +68,9 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 	}
 
 	private void initTable() {
+		table.setHeight(-1, Unit.PIXELS);
 		table.setWidth(95, Unit.PERCENTAGE);
+		
 		table.setContainerDataSource(beanItemContainer);
 		table.addGeneratedColumn(Competency_.name.getName(), new ColumnGenerator() {
 			

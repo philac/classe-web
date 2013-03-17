@@ -63,6 +63,7 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	public void init() {
 		if (!initialized) {
 			table = new Table("Matières");
+			table.setSizeUndefined();
 			layout.addComponent(table);
 			table.setContainerDataSource(bicSubject);
 			table.addGeneratedColumn("delete", new ColumnGenerator() {

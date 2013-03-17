@@ -13,7 +13,7 @@ import com.vaadin.ui.UI;
  * The Application's "main" class
  */
 @SuppressWarnings("serial")
-@Theme("reindeer")
+@Theme("classetheme")
 public class MyVaadinUI extends UI
 {
 
