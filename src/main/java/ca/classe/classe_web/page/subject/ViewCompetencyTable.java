@@ -11,7 +11,7 @@ import org.apache.commons.lang.Validate;
 import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Competency_;
 import ca.classe.classe_service.commun.BusEvenement;
-import ca.classe.classe_web.components.TableWithDeleteColumn;
+import ca.classe.classe_web.components.TableClasse;
 import ca.classe.classe_web.components.events.DeleteEvent;
 import ca.classe.classe_web.components.events.OnButtonClickEvent;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
@@ -40,29 +40,16 @@ import com.vaadin.ui.VerticalLayout;
 
 public class ViewCompetencyTable extends ViewBaseImpl {
 	
-	private TableWithDeleteColumn table;
+	private TableClasse table;
 	private BeanItemContainer<Competency> beanItemContainer = new BeanItemContainer<Competency>(Competency.class);
 	private VerticalLayout verticalLayout;
-	// Find the application directory
+	private Map<Integer, Float> weightValues = new HashMap<Integer, Float>();
 	private String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 	private FileResource addIcon = new FileResource(new File(basepath + "/WEB-INF/images/plus.png"));
-	private Map<Integer, Float> weightValues = new HashMap<Integer, Float>();
 
 	public ViewCompetencyTable(BusEvenement busEvenement) {
 		super(busEvenement);
-		table = new TableWithDeleteColumn("Compétences", busEvenement, new DeleteEvent() {
-			
-			@Override
-			public EvenementDeleteCompetency getDeleteEvent(Object itemId) {
-				return 	new EvenementDeleteCompetency((Competency) itemId);
-			}
-		}, new OnButtonClickEvent() {
-			
-			@Override
-			public void execute(Object itemId) {
-				weightValues.remove(((Competency) itemId).getId());
-			}
-		});
+		table = new TableClasse("Compétences", busEvenement).addDeleteColumn( new CompetencyDeleteEvent(), new OnDeleteButtonClickEvent());
 	}
 
 	@Override
@@ -280,5 +267,19 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 		Validate.isTrue(old instanceof Component && newComponent instanceof Component);
 		layout.replaceComponent((Component) old, (Component) newComponent);
 		newComponent.setValue(old.getValue());
+	}
+	
+	private class CompetencyDeleteEvent implements DeleteEvent {
+		@Override
+		public EvenementDeleteCompetency getEvent(Object itemId) {
+			return 	new EvenementDeleteCompetency((Competency) itemId);
+		}
+	}
+	
+	private class OnDeleteButtonClickEvent implements OnButtonClickEvent {
+		@Override
+		public void execute(Object itemId) {
+			weightValues.remove(((Competency) itemId).getId());
+		}
 	}
 }

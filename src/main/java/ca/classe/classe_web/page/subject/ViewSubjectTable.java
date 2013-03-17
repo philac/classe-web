@@ -14,9 +14,9 @@ import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Subject;
 import ca.classe.classe_modele.Subject_;
 import ca.classe.classe_service.commun.BusEvenement;
-import ca.classe.classe_web.components.TableWithDeleteColumn;
+import ca.classe.classe_web.components.TableClasse;
 import ca.classe.classe_web.components.events.DeleteEvent;
-import ca.classe.classe_web.components.events.OnButtonClickEvent;
+import ca.classe.classe_web.components.events.ModifyEvent;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
 import ca.classe.classe_web.page.subject.evenement.EvenementDeleteSubject;
 import ca.classe.classe_web.page.subject.evenement.EvenementModifySubject;
@@ -27,7 +27,6 @@ import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
-import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.VaadinService;
@@ -45,31 +44,20 @@ public class ViewSubjectTable extends ViewBaseImpl {
 
 	private static final long serialVersionUID = -2906930327616159639L;
 	
-	private TableWithDeleteColumn table;
+	private TableClasse table;
 	private VerticalLayout layout;
 	BeanItemContainer<Subject> bicSubject = new BeanItemContainer<Subject>(Subject.class);
 	// Find the application directory
 	private String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 	// Image as a file resource
-	private FileResource modifyIcon = new FileResource(new File(basepath + "/WEB-INF/images/icon_pencil.png"));
-	
 	private FileResource addIcon = new FileResource(new File(basepath + "/WEB-INF/images/plus.png"));
 
 	public ViewSubjectTable(BusEvenement busEvenement) {
 		super(busEvenement);
 		layout = new VerticalLayout();
-		table = new TableWithDeleteColumn("Matières",
-				busEvenement, new DeleteEvent() {
-					
-					@Override
-					public EvenementDeleteSubject getDeleteEvent(Object itemId) {
-						return new EvenementDeleteSubject((Subject) itemId);
-					}
-				}, new OnButtonClickEvent() {
-					@Override
-					public void execute(Object itemId) {
-					}
-				});
+		table = new TableClasse("Matières", busEvenement)
+			.addDeleteColumn(new SubjectDeleteEvent(), null)
+			.addModifyColumn(new SubjectModifyEvent(), null);
 	}
 
 	public void init() {
@@ -212,26 +200,6 @@ public class ViewSubjectTable extends ViewBaseImpl {
 					return null;
 				}
 			});
-			table.addGeneratedColumn("modify", new ColumnGenerator() {
-				
-				private static final long serialVersionUID = -4238432792751556346L;
-	
-				@Override
-				public Object generateCell(Table source, Object itemId, Object columnId) {
-					final Subject subject = (Subject) itemId;
-					Image modifyButton = new Image("", modifyIcon);
-					modifyButton.addClickListener(new ClickListener() {
-						
-						private static final long serialVersionUID = 5082244489286145248L;
-	
-						@Override
-						public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
-							busEvenement.notifier(new EvenementNavigateModifySubject(subject.getId()));
-						}
-					});
-					return modifyButton;
-				}
-			});
 			table.setVisibleColumns(new Object[] {Subject_.name.getName(), Subject_.competencies.getName(), "modify", "delete"});
 			table.setColumnHeaders(new String[] {"nom", "compétence", "", ""});
 			table.setColumnWidth(Subject_.name.getName(), 100);
@@ -252,5 +220,21 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	public void setEntities(List<Subject> subjects) {
 		bicSubject.removeAllItems();
 		bicSubject.addAll(subjects);
+	}
+	
+	private class SubjectDeleteEvent implements DeleteEvent {
+		@Override
+		public EvenementDeleteSubject getEvent(Object itemId) {
+			return new EvenementDeleteSubject((Subject) itemId);
+		}
+	}
+	
+	private class SubjectModifyEvent implements ModifyEvent {
+
+		@Override
+		public EvenementNavigateModifySubject getEvent(Object itemId) {
+			return new EvenementNavigateModifySubject(((Subject) itemId).getId());
+		}
+		
 	}
 }
