@@ -11,6 +11,7 @@ import org.apache.commons.lang.Validate;
 import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Competency_;
 import ca.classe.classe_service.commun.BusEvenement;
+import ca.classe.classe_web.components.AssignableFromSwitchableComponent;
 import ca.classe.classe_web.components.TableClasse;
 import ca.classe.classe_web.components.events.DeleteEvent;
 import ca.classe.classe_web.components.events.OnButtonClickEvent;
@@ -271,7 +272,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 	
 	private class CompetencyDeleteEvent implements DeleteEvent {
 		@Override
-		public EvenementDeleteCompetency getEvent(Object itemId) {
+		public EvenementDeleteCompetency getEvent(Object source, Object itemId) {
 			return 	new EvenementDeleteCompetency((Competency) itemId);
 		}
 	}
@@ -281,5 +282,25 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 		public void execute(Object itemId) {
 			weightValues.remove(((Competency) itemId).getId());
 		}
+	}
+	
+	private class AssignableCompetencyName implements AssignableFromSwitchableComponent {
+
+		private Competency competency;
+		
+		public AssignableCompetencyName(Competency competency) {
+			this.competency = competency;
+		}
+		
+		@Override
+		public String getValue() {
+			return competency.getName();
+		}
+
+		@Override
+		public void setValue(Object value) {
+			competency.setName((String) value);
+		}
+		
 	}
 }

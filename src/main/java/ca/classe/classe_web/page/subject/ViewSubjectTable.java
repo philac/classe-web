@@ -224,7 +224,7 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	
 	private class SubjectDeleteEvent implements DeleteEvent {
 		@Override
-		public EvenementDeleteSubject getEvent(Object itemId) {
+		public EvenementDeleteSubject getEvent(Object source, Object itemId) {
 			return new EvenementDeleteSubject((Subject) itemId);
 		}
 	}
@@ -232,7 +232,7 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	private class SubjectModifyEvent implements ModifyEvent {
 
 		@Override
-		public EvenementNavigateModifySubject getEvent(Object itemId) {
+		public EvenementNavigateModifySubject getEvent(Object source, Object itemId) {
 			return new EvenementNavigateModifySubject(((Subject) itemId).getId());
 		}
 		

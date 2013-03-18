@@ -54,7 +54,7 @@ public class TableClasse extends Table {
 						if (onDeleteButtonClickEvent != null) {
 							onDeleteButtonClickEvent.execute(itemId);
 						}
-						busEvenement.notifier(deleteEvent.getEvent(itemId));
+						busEvenement.notifier(deleteEvent.getEvent(TableClasse.this, itemId));
 					}
 				});
 				return delete;
@@ -80,7 +80,7 @@ public class TableClasse extends Table {
 						if (onModifyButtonclickEvent != null) {
 							onModifyButtonclickEvent.execute(itemId);
 						}
-						busEvenement.notifier(modifyEvent.getEvent(itemId));
+						busEvenement.notifier(modifyEvent.getEvent(TableClasse.this, itemId));
 					}
 				});
 				return modifyButton;
