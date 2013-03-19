@@ -155,10 +155,8 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 								field.setComponentError(new UserError("Veuillez entrer une valeur numérique"));
 							}
 						}
-						
 					}
 				});
-				
 				return layout;
 			}
 		});
