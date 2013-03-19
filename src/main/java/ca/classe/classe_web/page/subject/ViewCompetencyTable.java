@@ -12,8 +12,10 @@ import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Competency_;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.components.AssignableFromSwitchableComponent;
+import ca.classe.classe_web.components.SwitchableComponentOnClick;
 import ca.classe.classe_web.components.TableClasse;
 import ca.classe.classe_web.components.events.DeleteEvent;
+import ca.classe.classe_web.components.events.ModifyEvent;
 import ca.classe.classe_web.components.events.OnButtonClickEvent;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
 import ca.classe.classe_web.page.subject.evenement.EvenementDeleteCompetency;
@@ -81,33 +83,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
-				final HorizontalLayout layout = new HorizontalLayout();
-				final Label label = new Label();
-				final TextField field = new TextField();
-				final Competency competency = (Competency) itemId;
-				label.setValue(competency.getName());
-				layout.addComponent(label);
-				layout.addLayoutClickListener(new LayoutClickListener() {
-					
-					private static final long serialVersionUID = -4039136538572434269L;
-
-					@Override
-					public void layoutClick(LayoutClickEvent event) {
-						swapComponents(layout, label, field);
-					}
-				});
-				field.addBlurListener(new BlurListener() {
-					
-					private static final long serialVersionUID = -1669497376704756735L;
-
-					@Override
-					public void blur(BlurEvent event) {
-						swapComponents(layout, field, label);
-						competency.setName(field.getValue());
-						busEvenement.notifier(new EvenementModifyCompetency(competency));
-					}
-				});
-				return layout;
+				return new SwitchableComponentOnClick(busEvenement, new AssignableCompetencyName((Competency) itemId), new CompetencyModifyEvent(), ViewCompetencyTable.this);
 			}
 		});
 		table.addGeneratedColumn(Competency_.description.getName(), new ColumnGenerator() {
@@ -116,50 +92,7 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
-				final HorizontalLayout layout = new HorizontalLayout();
-				final Competency competency = (Competency) itemId;
-				final Label label = new Label(competency.getDescription());
-				final Image addImage = new Image();
-				addImage.setIcon(addIcon);
-				final TextField field = new TextField();
-				if (StringUtils.isNotBlank(competency.getDescription())) {
-					layout.addComponent(label);
-				} else {
-					layout.addComponent(addImage);
-				}
-				
-				layout.addLayoutClickListener(new LayoutClickListener() {
-					
-					private static final long serialVersionUID = -5097342185606913264L;
-
-					@Override
-					public void layoutClick(LayoutClickEvent event) {
-						if (layout.getComponent(0).equals(label)) {
-							swapComponents(layout, label, field);
-						} else if (layout.getComponent(0).equals(addImage)) {
-							layout.replaceComponent(addImage, field);
-						}
-					}
-				});
-				
-				field.addBlurListener(new BlurListener() {
-					
-					private static final long serialVersionUID = -5018855485844191677L;
-
-					@Override
-					public void blur(BlurEvent event) {
-						if (StringUtils.isNotBlank(field.getValue())) {
-							swapComponents(layout, field, label);
-						} else {
-							layout.replaceComponent(field, addImage);
-						}
-						
-						competency.setDescription(field.getValue());
-						busEvenement.notifier(new EvenementModifyCompetency(competency));
-					}
-				});
-				
-				return layout;
+				return new SwitchableComponentOnClick(busEvenement, new AssignableCompetencyDescription((Competency) itemId), new CompetencyModifyEvent(), ViewCompetencyTable.this);
 			}
 		});
 		table.addGeneratedColumn(Competency_.weight.getName(), new ColumnGenerator() {
@@ -300,6 +233,43 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 		@Override
 		public void setValue(Object value) {
 			competency.setName((String) value);
+		}
+
+		@Override
+		public Object getItemObject() {
+			return competency;
+		}
+	}
+	
+	private class AssignableCompetencyDescription implements AssignableFromSwitchableComponent {
+
+		private Competency competency;
+		
+		public AssignableCompetencyDescription(Competency competency) {
+			this.competency = competency;
+		}
+		
+		@Override
+		public String getValue() {
+			return competency.getDescription();
+		}
+
+		@Override
+		public void setValue(Object value) {
+			competency.setDescription((String) value);
+		}
+
+		@Override
+		public Object getItemObject() {
+			return competency;
+		}
+	}
+	
+	private class CompetencyModifyEvent implements ModifyEvent {
+
+		@Override
+		public EvenementModifyCompetency getEvent(Object source, Object itemId) {
+			return new EvenementModifyCompetency((Competency) itemId);
 		}
 		
 	}

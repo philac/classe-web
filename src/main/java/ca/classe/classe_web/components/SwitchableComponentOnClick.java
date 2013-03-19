@@ -26,7 +26,6 @@ public class SwitchableComponentOnClick extends HorizontalLayout {
 	private static final long serialVersionUID = 5604418905428551072L;
 	
 	private Label label = new Label();
-	private HorizontalLayout hl = new HorizontalLayout();
 	private TextField field = new TextField();
 	private AssignableFromSwitchableComponent assignable;
 	private ModifyEvent modifyEvent;
@@ -39,27 +38,27 @@ public class SwitchableComponentOnClick extends HorizontalLayout {
 		this.busEvenement = busEvenement;
 		this.assignable = assignable;
 		this.modifyEvent = modifyEvent;
-		hl.addComponent(label);
+		label.setValue(assignable.getValue());
 		initComponent(source);
 	}
 	
 	public void initComponent(final Object source) {
 		addImage.setIcon(addIcon);
 		if (StringUtils.isNotBlank(assignable.getValue())) {
-			hl.addComponent(label);
+			addComponent(label);
 		} else {
-			hl.addComponent(addImage);
+			addComponent(addImage);
 		}
-		hl.addLayoutClickListener(new LayoutClickListener() {
+		addLayoutClickListener(new LayoutClickListener() {
 			
 			private static final long serialVersionUID = -2741245649978592560L;
 
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
-				if (hl.getComponent(0).equals(label)) {
-					swapComponents(hl, label, field);
-				} else if (hl.getComponent(0).equals(addImage)) {
-					hl.replaceComponent(addImage, field);
+				if (getComponent(0).equals(label)) {
+					swapComponents(label, field);
+				} else if (getComponent(0).equals(addImage)) {
+					replaceComponent(addImage, field);
 				}
 			}
 		});
@@ -71,18 +70,19 @@ public class SwitchableComponentOnClick extends HorizontalLayout {
 			@Override
 			public void blur(BlurEvent event) {
 				if (StringUtils.isNotBlank(field.getValue())) {
-					swapComponents(hl, field, label);
+					swapComponents(field, label);
 				} else {
-					hl.replaceComponent(field, addImage);
+					replaceComponent(field, addImage);
 				}
-				busEvenement.notifier(modifyEvent.getEvent(source, assignable));
+				assignable.setValue(field.getValue());
+				busEvenement.notifier(modifyEvent.getEvent(source, assignable.getItemObject()));
 			}
 		});
 	}
 	
-	private void swapComponents(HorizontalLayout layout, Property<String> old, Property<String> newComponent) {
+	private void swapComponents(Property<String> old, Property<String> newComponent) {
 		Validate.isTrue(old instanceof Component && newComponent instanceof Component);
-		layout.replaceComponent((Component) old, (Component) newComponent);
+		replaceComponent((Component) old, (Component) newComponent);
 		newComponent.setValue(old.getValue());
 	}
 }
