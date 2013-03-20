@@ -31,6 +31,10 @@ public class TableClasse extends Table {
 		this.busEvenement = busEvenement;
 	}
 	
+	public TableClasse(BusEvenement busEvenement) {
+		this("", busEvenement);
+	}
+
 	public void initTable() {
 		setSizeUndefined();
 	}

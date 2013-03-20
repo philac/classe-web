@@ -35,6 +35,8 @@ public abstract class AddingView<E extends BaseEntite<? extends Serializable>> e
 	private List<HorizontalLayout> fields = new ArrayList<HorizontalLayout>();
 	
 	protected void init() {
+		layout.setSpacing(true);
+		layout.setMargin(true);
 		addFields();
 		initButtons();
 		bindData();
@@ -75,6 +77,7 @@ public abstract class AddingView<E extends BaseEntite<? extends Serializable>> e
 	
 	protected void addField(String caption, Field<?> field) {
 		HorizontalLayout layout = new HorizontalLayout();
+		layout.setSpacing(true);
 		layout.addComponent(new Label(caption));
 		layout.addComponent(field);
 		fields.add(layout);

@@ -6,6 +6,7 @@ import org.apache.commons.lang.Validate;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_service.commun.ContexteApplicationUtils;
 import ca.classe.classe_web.menu.MainMenu;
+import ca.classe.classe_web.page.classe.PageClasses;
 import ca.classe.classe_web.page.enums.PageNames;
 import ca.classe.classe_web.page.subject.PageSubject;
 import ca.classe.classe_web.page.subject.PageSubjects;
@@ -61,10 +62,13 @@ public class MainView extends VerticalLayout implements View, EvenementNavigateM
 		String params = event.getParameters();
 		PageNames pageName = PageNames.getByUri(params);
 		if (pageName != null) {
+			event.getNavigator().getUI().getPage().setTitle(pageName.getTitle());
 			switch (pageName) {
 			case SUBJECT:
-				event.getNavigator().getUI().getPage().setTitle(pageName.getTitle());
 				content.setContent(new PageSubjects(busEvenement));
+				break;
+			case CLASSE:
+				content.setContent(new PageClasses(busEvenement));
 				break;
 			default:
 				break;

@@ -18,6 +18,7 @@ public class MainMenu extends VerticalLayout {
 		this.navigator = navigator;
 		
 		addComponent(new Button(PageNames.SUBJECT.getTitle(), new ButtonListener(PageNames.SUBJECT.getUri())));
+		addComponent(new Button(PageNames.CLASSE.getTitle(), new ButtonListener(PageNames.CLASSE.getUri())));
 	}
 	
 	private class ButtonListener implements Button.ClickListener {

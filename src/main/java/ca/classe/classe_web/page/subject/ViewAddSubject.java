@@ -25,7 +25,7 @@ public class ViewAddSubject extends AddingView<Subject> {
 	protected void init() {
 		if (!initialized) {
 			nameField.setNullRepresentation("");
-			addField("Nom", nameField);
+			addField("Nom :", nameField);
 			super.init();
 			initialized = true;
 		}

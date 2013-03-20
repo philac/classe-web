@@ -14,6 +14,8 @@ import ca.classe.classe_modele.Competency;
 import ca.classe.classe_modele.Subject;
 import ca.classe.classe_modele.Subject_;
 import ca.classe.classe_service.commun.BusEvenement;
+import ca.classe.classe_web.components.AssignableFromSwitchableComponent;
+import ca.classe.classe_web.components.SwitchableComponentOnClick;
 import ca.classe.classe_web.components.TableClasse;
 import ca.classe.classe_web.components.events.DeleteEvent;
 import ca.classe.classe_web.components.events.ModifyEvent;
@@ -37,7 +39,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class ViewSubjectTable extends ViewBaseImpl {
@@ -55,9 +56,9 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	public ViewSubjectTable(BusEvenement busEvenement) {
 		super(busEvenement);
 		layout = new VerticalLayout();
-		table = new TableClasse("Matières", busEvenement)
+		table = new TableClasse(busEvenement)
 			.addDeleteColumn(new SubjectDeleteEvent(), null)
-			.addModifyColumn(new SubjectModifyEvent(), null);
+			.addModifyColumn(new SubjectNavigateModifyEvent(), null);
 	}
 
 	public void init() {
@@ -71,36 +72,8 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	
 				@Override
 				public Object generateCell(Table source, Object itemId, Object columnId) {
-					final Subject subject = (Subject) itemId;
-					final Label label = new Label(subject.getName());
-					final HorizontalLayout hl = new HorizontalLayout();
-					final TextField field = new TextField();
-					hl.addComponent(label);
-					hl.addLayoutClickListener(new LayoutClickListener() {
-						
-						private static final long serialVersionUID = -2741245649978592560L;
-	
-						@Override
-						public void layoutClick(LayoutClickEvent event) {
-							hl.replaceComponent(label, field);
-							field.setValue(subject.getName());
-							field.focus();
-							field.addBlurListener(new BlurListener() {
-								
-								private static final long serialVersionUID = 2103543258685792042L;
-	
-								@Override
-								public void blur(BlurEvent event) {
-									subject.setName(field.getValue());
-									hl.removeAllComponents();
-									Label label2 = new Label(subject.getName());
-									hl.addComponent(label2);
-									busEvenement.notifier(new EvenementModifySubject(ViewSubjectTable.this, subject));
-								}
-							});
-						}
-					});
-					return hl;
+					
+					return new SwitchableComponentOnClick(busEvenement, new AssignableSubjectName((Subject) itemId), new SubjectModifyEvent(), ViewSubjectTable.this);
 				}
 			});
 			table.addGeneratedColumn(Subject_.competencies.getName(), new ColumnGenerator() {
@@ -229,7 +202,7 @@ public class ViewSubjectTable extends ViewBaseImpl {
 		}
 	}
 	
-	private class SubjectModifyEvent implements ModifyEvent {
+	private class SubjectNavigateModifyEvent implements ModifyEvent {
 
 		@Override
 		public EvenementNavigateModifySubject getEvent(Object source, Object itemId) {
@@ -237,4 +210,39 @@ public class ViewSubjectTable extends ViewBaseImpl {
 		}
 		
 	}
+	
+	private class AssignableSubjectName implements AssignableFromSwitchableComponent {
+
+		private Subject subject;
+
+		public AssignableSubjectName(Subject itemId) {
+			this.subject = itemId;
+		}
+
+		@Override
+		public String getValue() {
+			return subject.getName();
+		}
+
+		@Override
+		public void setValue(Object value) {
+			subject.setName((String) value);
+		}
+
+		@Override
+		public Object getItemObject() {
+			return subject;
+		}
+		
+	}
+	
+	private class SubjectModifyEvent implements ModifyEvent {
+
+		@Override
+		public EvenementModifySubject getEvent(Object source, Object itemId) {
+			return new EvenementModifySubject(source, (Subject) itemId);
+		}
+		
+	}
+	
 }

@@ -8,6 +8,8 @@ import ca.classe.classe_web.page.subject.evenement.EvenementDeleteSubject;
 import ca.classe.classe_web.page.subject.evenement.EvenementModifySubject;
 
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.VerticalLayout;
 
@@ -26,8 +28,9 @@ EvenementModifySubject.Observer
 	private void initLayout() {
 		mainLayout = new VerticalLayout();
 		viewAddSubject = new ViewAddSubject(busEvenement);
-		mainLayout.addComponent(viewAddSubject.getLayout());
+		mainLayout.addComponent(new Label("<h1>Les Matières</h1>", ContentMode.HTML));
 		mainLayout.addComponent(view.getLayout());
+		mainLayout.addComponent(viewAddSubject.getLayout());
 		view.setEntities(model.loadSubjects());
 		view.init();
 	}

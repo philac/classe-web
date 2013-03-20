@@ -1,7 +1,7 @@
 package ca.classe.classe_web.page.enums;
 
 public enum PageNames {
-	SUBJECT("Subject", "Les matières"), MODIFY("Modify", "Modification");
+	SUBJECT("Subject", "Les matières"), MODIFY("Modify", "Modification"), CLASSE("Class", "Les classes");
 	
 	private String uri;
 	private String title;
