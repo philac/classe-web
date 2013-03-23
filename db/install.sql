@@ -2,23 +2,47 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+DROP SCHEMA IF EXISTS `class_manager` ;
 CREATE SCHEMA IF NOT EXISTS `class_manager` DEFAULT CHARACTER SET latin1 ;
 USE `class_manager` ;
 
 -- -----------------------------------------------------
+-- Table `class_manager`.`subject`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `class_manager`.`subject` ;
+
+CREATE  TABLE IF NOT EXISTS `class_manager`.`subject` (
+  `idsubject` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NULL ,
+  PRIMARY KEY (`idsubject`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `class_manager`.`class`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `class_manager`.`class` ;
+
 CREATE  TABLE IF NOT EXISTS `class_manager`.`class` (
   `idclass` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NOT NULL ,
   `level` VARCHAR(45) NULL ,
-  PRIMARY KEY (`idclass`) )
+  `subject_idsubject` INT NOT NULL ,
+  PRIMARY KEY (`idclass`, `subject_idsubject`) ,
+  INDEX `fk_class_subject1_idx` (`subject_idsubject` ASC) ,
+  CONSTRAINT `fk_class_subject1`
+    FOREIGN KEY (`subject_idsubject` )
+    REFERENCES `class_manager`.`subject` (`idsubject` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `class_manager`.`student`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `class_manager`.`student` ;
+
 CREATE  TABLE IF NOT EXISTS `class_manager`.`student` (
   `idstudent` INT NOT NULL AUTO_INCREMENT ,
   `last_name` VARCHAR(45) NULL ,
@@ -37,6 +61,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `class_manager`.`assignment_type`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `class_manager`.`assignment_type` ;
+
 CREATE  TABLE IF NOT EXISTS `class_manager`.`assignment_type` (
   `idassignment_type` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NULL ,
@@ -45,18 +71,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `class_manager`.`subject`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `class_manager`.`subject` (
-  `idsubject` INT NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(45) NULL ,
-  PRIMARY KEY (`idsubject`) )
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `class_manager`.`competency`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `class_manager`.`competency` ;
+
 CREATE  TABLE IF NOT EXISTS `class_manager`.`competency` (
   `idcompetency` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NULL ,
@@ -76,6 +94,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `class_manager`.`assignment`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `class_manager`.`assignment` ;
+
 CREATE  TABLE IF NOT EXISTS `class_manager`.`assignment` (
   `idassignment` INT NOT NULL AUTO_INCREMENT ,
   `title` VARCHAR(45) NULL ,
@@ -102,6 +122,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `class_manager`.`assignment_has_student`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `class_manager`.`assignment_has_student` ;
+
 CREATE  TABLE IF NOT EXISTS `class_manager`.`assignment_has_student` (
   `assignment_idassignment` INT NOT NULL ,
   `student_idstudent` INT NOT NULL ,
@@ -119,28 +141,6 @@ CREATE  TABLE IF NOT EXISTS `class_manager`.`assignment_has_student` (
   CONSTRAINT `fk_assignment_has_student_student1`
     FOREIGN KEY (`student_idstudent` )
     REFERENCES `class_manager`.`student` (`idstudent` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `class_manager`.`class_has_subject`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `class_manager`.`class_has_subject` (
-  `class_idclass` INT NOT NULL ,
-  `subject_idsubject` INT NOT NULL ,
-  PRIMARY KEY (`class_idclass`, `subject_idsubject`) ,
-  INDEX `fk_class_has_subject_subject1_idx` (`subject_idsubject` ASC) ,
-  INDEX `fk_class_has_subject_class1_idx` (`class_idclass` ASC) ,
-  CONSTRAINT `fk_class_has_subject_class1`
-    FOREIGN KEY (`class_idclass` )
-    REFERENCES `class_manager`.`class` (`idclass` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_class_has_subject_subject1`
-    FOREIGN KEY (`subject_idsubject` )
-    REFERENCES `class_manager`.`subject` (`idsubject` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
