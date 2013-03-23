@@ -6,7 +6,7 @@ import ca.classe.classe_web.mvp.PresenterBase;
 import com.vaadin.ui.Layout;
 
 public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelection>{
-
+// TODO implémenter un événement sur la sélection d'une matière pour setter les classes.
 	private ViewManageClassMarks viewManageClassMark;
 	
 	public PresenterClasses(ModelClass model, ViewClassSelection view,

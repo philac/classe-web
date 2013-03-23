@@ -22,6 +22,8 @@ public class Subject extends BaseEntite<Integer>{
 	private String name;
 	private Set<Competency> competencies;
 	
+	//TODO ajouter lien aux classes.
+	
 	@Override
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
