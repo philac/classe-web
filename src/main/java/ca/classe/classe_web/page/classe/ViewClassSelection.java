@@ -9,6 +9,7 @@ import ca.classe.classe_modele.Subject;
 import ca.classe.classe_modele.Subject_;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
+import ca.classe.classe_web.page.classe.events.EventSelectClass;
 import ca.classe.classe_web.page.classe.events.EventSelectSubject;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -77,7 +78,8 @@ public class ViewClassSelection extends ViewBaseImpl {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				// TODO Lancer l'événement
+				Classe classe = (Classe) cmbClass.getValue();
+				busEvenement.notifier(new EventSelectClass(classe));
 				
 			}
 		});

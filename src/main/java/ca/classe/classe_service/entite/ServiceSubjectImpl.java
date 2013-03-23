@@ -59,8 +59,8 @@ public class ServiceSubjectImpl extends ServiceBaseImpl implements
 	}
 
 	@Override
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
 	public Subject loadByIdWithClasses(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		return daoSubject.loadByIdWithClasses(id);
 	}
 }

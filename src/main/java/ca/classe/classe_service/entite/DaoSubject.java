@@ -7,4 +7,6 @@ public interface DaoSubject extends DaoBase<Subject, Integer> {
 
 	Subject loadByIdWithCompetencies(Integer id);
 
+	Subject loadByIdWithClasses(Integer id);
+
 }

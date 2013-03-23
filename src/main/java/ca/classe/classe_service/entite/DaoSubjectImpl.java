@@ -28,4 +28,17 @@ public class DaoSubjectImpl extends DaoBaseImpl<Subject, Integer> implements
 		
 		return entityManager.createQuery(cq).getSingleResult();
 	}
+
+	@Override
+	public Subject loadByIdWithClasses(Integer id) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Subject> cq = cb.createQuery(Subject.class);
+		Root<Subject> root = cq.from(Subject.class);
+		
+		root.fetch(Subject_.classes, JoinType.LEFT);
+		Predicate predicateId = cb.equal(root.get(Subject_.id), id);
+		cq.where(predicateId);
+		
+		return entityManager.createQuery(cq).getSingleResult();
+	}
 }
