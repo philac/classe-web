@@ -57,4 +57,10 @@ public class ServiceSubjectImpl extends ServiceBaseImpl implements
 	public Subject loadByIdWithCompetencies(Integer id) {
 		return daoSubject.loadByIdWithCompetencies(id);
 	}
+
+	@Override
+	public Subject loadByIdWithClasses(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

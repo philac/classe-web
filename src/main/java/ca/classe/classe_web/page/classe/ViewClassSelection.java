@@ -1,6 +1,7 @@
 package ca.classe.classe_web.page.classe;
 
 import java.util.List;
+import java.util.Set;
 
 import ca.classe.classe_modele.Classe;
 import ca.classe.classe_modele.Classe_;
@@ -8,6 +9,7 @@ import ca.classe.classe_modele.Subject;
 import ca.classe.classe_modele.Subject_;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
+import ca.classe.classe_web.page.classe.events.EventSelectSubject;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -81,10 +83,10 @@ public class ViewClassSelection extends ViewBaseImpl {
 		});
 	}
 	
-	public void setClasses(List<Classe> classes) {
+	public void setClasses(Set<Classe> set) {
 		bicClasse.removeAllItems();
-		bicClasse.addAll(classes);
-		cmbClass.setEnabled(classes.size() > 0);
+		bicClasse.addAll(set);
+		cmbClass.setEnabled(set.size() > 0);
 	}
 
 	private void initCmbSubject() {
@@ -97,8 +99,8 @@ public class ViewClassSelection extends ViewBaseImpl {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				// TODO Lancer l'événement
-				
+				Subject subject = (Subject) cmbSubject.getValue();
+				busEvenement.notifier(new EventSelectSubject(subject));
 			}
 		});
 		

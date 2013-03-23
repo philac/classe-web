@@ -21,8 +21,7 @@ public class Subject extends BaseEntite<Integer>{
 	private static final long serialVersionUID = 5787266323296374618L;
 	private String name;
 	private Set<Competency> competencies;
-	
-	//TODO ajouter lien aux classes.
+	private Set<Classe> classes;
 	
 	@Override
 	@Id
@@ -49,5 +48,15 @@ public class Subject extends BaseEntite<Integer>{
 
 	public void setCompetencies(Set<Competency> competencies) {
 		this.competencies = competencies;
+	}
+	
+    @BatchSize(size= 30)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+	public Set<Classe> getClasses() {
+		return classes;
+	}
+
+	public void setClasses(Set<Classe> classes) {
+		this.classes = classes;
 	}
 }

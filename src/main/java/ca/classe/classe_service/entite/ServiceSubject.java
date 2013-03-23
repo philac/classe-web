@@ -18,4 +18,6 @@ public interface ServiceSubject extends ServiceBase {
 	Subject loadById(Integer subjectId);
 
 	Subject loadByIdWithCompetencies(Integer id);
+	
+	Subject loadByIdWithClasses(Integer id);
 }

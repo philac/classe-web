@@ -10,8 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -26,7 +25,7 @@ public class Classe extends BaseEntite<Integer>{
 	private String name;
 	private String level;
 	private Set<Student> students;
-	private Set<Subject> subjects;
+	private Subject subject;
 	
 	@Override
 	@Id
@@ -59,16 +58,12 @@ public class Classe extends BaseEntite<Integer>{
 	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name = "CLASS_HAS_SUBJECT",
-		joinColumns = { 
-			@JoinColumn(name = "CLASS_IDCLASS") 
-			}, inverseJoinColumns = {
-			@JoinColumn(name = "SUBJECT_IDSUBJECT") })
-	public Set<Subject> getSubjects() {
-		return subjects;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "SUBJECT_IDSUBJECT")
+	public Subject getSubject() {
+		return subject;
 	}
-	public void setSubjects(Set<Subject> subjects) {
-		this.subjects = subjects;
+	public void setSubject(Subject subject) {
+		this.subject = subject;
 	}
 }
