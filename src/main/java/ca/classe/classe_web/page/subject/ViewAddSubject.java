@@ -38,7 +38,7 @@ public class ViewAddSubject extends AddingView<Subject> {
 
 	@Override
 	protected Evenement<EvenementCancel.Observer> getCancelEvent() {
-		return new EvenementCancel();
+		return new EvenementCancel(this);
 	}
 
 

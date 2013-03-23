@@ -9,6 +9,7 @@ import ca.classe.classe_modele.Subject;
 import ca.classe.classe_modele.Subject_;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
+import ca.classe.classe_web.page.classe.events.EventRequestAddClass;
 import ca.classe.classe_web.page.classe.events.EventSelectClass;
 import ca.classe.classe_web.page.classe.events.EventSelectSubject;
 
@@ -61,7 +62,7 @@ public class ViewClassSelection extends ViewBaseImpl {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				//TODO lancer l'événement.
+				busEvenement.notifier(new EventRequestAddClass());
 			}
 		});
 		
@@ -106,6 +107,11 @@ public class ViewClassSelection extends ViewBaseImpl {
 			}
 		});
 		
+	}
+
+	public void selectClass(Subject subject, Classe bean) {
+		cmbSubject.select(subject);
+		cmbClass.select(bean);
 	}
 
 }

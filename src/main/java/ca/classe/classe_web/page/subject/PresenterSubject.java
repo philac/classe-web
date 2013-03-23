@@ -85,8 +85,10 @@ implements EvenementModifyCompetency.Observer, EvenementDeleteCompetency.Observe
 	}
 
 	@Override
-	public void onCancel() {
-		viewAddCompetency.reinitFields();
+	public void onCancel(Object source) {
+		if (source == viewAddCompetency) {
+			viewAddCompetency.reinitFields();
+		}
 	}
 
 }

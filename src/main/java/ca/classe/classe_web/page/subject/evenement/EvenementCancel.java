@@ -6,10 +6,15 @@ import ca.classe.classe_service.commun.TypeEvenement;
 public class EvenementCancel implements Evenement<EvenementCancel.Observer> {
 
 	public interface Observer {
-		void onCancel();
+		void onCancel(Object source);
 	}
 
 	public static final TypeEvenement<Observer> TYPE = new TypeEvenement<EvenementCancel.Observer>();
+	private Object source;
+	
+	public EvenementCancel(Object source) {
+		this.source = source;
+	}
 	
 	@Override
 	public TypeEvenement<Observer> getType() {
@@ -18,7 +23,7 @@ public class EvenementCancel implements Evenement<EvenementCancel.Observer> {
 
 	@Override
 	public void notifierObservateur(Observer observer) {
-		observer.onCancel();
+		observer.onCancel(source);
 	}
 
 }

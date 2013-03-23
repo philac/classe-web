@@ -58,7 +58,7 @@ public class ViewAddCompetency extends AddingView<Competency> {
 
 	@Override
 	protected Evenement<Observer> getCancelEvent() {
-		return new EvenementCancel();
+		return new EvenementCancel(this);
 	}
 
 }

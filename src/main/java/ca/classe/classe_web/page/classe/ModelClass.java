@@ -2,6 +2,7 @@ package ca.classe.classe_web.page.classe;
 
 import java.util.List;
 
+import ca.classe.classe_modele.Classe;
 import ca.classe.classe_modele.Subject;
 import ca.classe.classe_service.commun.ContexteApplicationUtils;
 import ca.classe.classe_service.entite.ServiceClass;
@@ -31,6 +32,10 @@ public class ModelClass extends ModelBaseImpl<ServiceClass> {
 
 	public List<Subject> loadAllSubjects() {
 		return serviceSubject.loadAll();
+	}
+	
+	public void addClass(Classe classe) {
+		service.add(classe);
 	}
 
 }

@@ -63,8 +63,10 @@ EvenementModifySubject.Observer
 	}
 
 	@Override
-	public void onCancel() {
-		viewAddSubject.reinitFields();
+	public void onCancel(Object source) {
+		if (source == viewAddSubject) {
+			viewAddSubject.reinitFields();
+		}
 	}
 
 	@Override
