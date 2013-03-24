@@ -1,10 +1,14 @@
 package ca.classe.classe_web.page.classe;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ca.classe.classe_modele.Classe;
 import ca.classe.classe_modele.Subject;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.PresenterBase;
 import ca.classe.classe_web.page.classe.events.EventRequestAddClass;
+import ca.classe.classe_web.page.classe.events.EventRequestClassModification;
 import ca.classe.classe_web.page.classe.events.EventSelectClass;
 import ca.classe.classe_web.page.classe.events.EventSelectSubject;
 import ca.classe.classe_web.page.subject.evenement.EvenementCancel;
@@ -14,17 +18,21 @@ import com.vaadin.ui.VerticalLayout;
 
 public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelection>
 	implements EventSelectSubject.Observer, EventSelectClass.Observer,
-	EventAddClass.Observer, EvenementCancel.Observer, EventRequestAddClass.Observer {
+	EventAddClass.Observer, EvenementCancel.Observer, EventRequestAddClass.Observer,
+	EventRequestClassModification.Ovserver {
 	
 	private ViewManageClassMarks viewManageClassMark;
+	private ViewModifyClass viewModifyClass;
 	private ViewAddClass viewAddClass;	
 	private VerticalLayout layout = new VerticalLayout();
 	
 	public PresenterClasses(ModelClass model, ViewClassSelection view,
-			ViewManageClassMarks viewManageClassMarks, ViewAddClass viewAddClass, BusEvenement busEvenement) {
+			ViewManageClassMarks viewManageClassMarks, ViewAddClass viewAddClass,
+			ViewModifyClass viewModifyClass, BusEvenement busEvenement) {
 		super(model, view, busEvenement);
 		this.viewManageClassMark = viewManageClassMarks;
 		this.viewAddClass = viewAddClass;
+		this.viewModifyClass = viewModifyClass;
 	}
 
 	@Override
@@ -34,6 +42,7 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 		busEvenement.observer(EventRequestAddClass.TYPE, this);
 		busEvenement.observer(EvenementCancel.TYPE, this);
 		busEvenement.observer(EventAddClass.TYPE, this);
+		busEvenement.observer(EventRequestClassModification.TYPE, this);
 	}
 
 	@Override
@@ -41,6 +50,8 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 		view.setSubjects(model.loadAllSubjects());
 		layout.addComponent(view.getLayout());
 		layout.addComponent(viewAddClass.getLayout());
+		layout.addComponent(viewModifyClass.getLayout());
+		viewModifyClass.getLayout().setVisible(false);
 		viewAddClass.setSubjects(model.loadAllSubjects());
 		viewAddClass.init();
 		viewAddClass.getLayout().setVisible(false);
@@ -49,8 +60,12 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 
 	@Override
 	public void onSelect(Subject subject) {
-		Subject currentSubject = model.loadByIdWithClasses(subject.getId());
-		view.setClasses(currentSubject.getClasses());
+		Set<Classe> classes = new HashSet<Classe>();
+		if (subject != null) {
+			Subject currentSubject = model.loadByIdWithClasses(subject.getId());
+			classes = currentSubject.getClasses();
+		}
+		view.setClasses(classes);
 	}
 
 	@Override
@@ -79,6 +94,12 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 	@Override
 	public void onRequestAddClass() {
 		viewAddClass.getLayout().setVisible(true);
+	}
+
+	@Override
+	public void onRequestClassModification(Classe classe) {
+		viewModifyClass.setClasse(classe);
+		viewModifyClass.getLayout().setVisible(classe != null);
 	}
 
 }

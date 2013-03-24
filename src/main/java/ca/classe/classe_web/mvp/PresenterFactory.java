@@ -6,6 +6,7 @@ import ca.classe.classe_web.page.classe.PresenterClasses;
 import ca.classe.classe_web.page.classe.ViewAddClass;
 import ca.classe.classe_web.page.classe.ViewClassSelection;
 import ca.classe.classe_web.page.classe.ViewManageClassMarks;
+import ca.classe.classe_web.page.classe.ViewModifyClass;
 import ca.classe.classe_web.page.subject.ModelSubject;
 import ca.classe.classe_web.page.subject.PresenterSubject;
 import ca.classe.classe_web.page.subject.PresenterSubjects;
@@ -57,7 +58,7 @@ public class PresenterFactory {
 	
 	private PresenterClasses getInstancePresenterClasses() {
 		if (presenterClasses == null) {
-			presenterClasses = new PresenterClasses(ModelClass.getInstance(), new ViewClassSelection(busEvenement), new ViewManageClassMarks(busEvenement), new ViewAddClass(busEvenement), busEvenement);
+			presenterClasses = new PresenterClasses(ModelClass.getInstance(), new ViewClassSelection(busEvenement), new ViewManageClassMarks(busEvenement), new ViewAddClass(busEvenement), new ViewModifyClass(busEvenement), busEvenement);
 		}
 		return presenterClasses;
 	}

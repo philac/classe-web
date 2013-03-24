@@ -11,12 +11,14 @@ import ca.classe.classe_modele.Subject_;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.ViewBaseImpl;
 import ca.classe.classe_web.page.classe.events.EventRequestAddClass;
+import ca.classe.classe_web.page.classe.events.EventRequestClassModification;
 import ca.classe.classe_web.page.classe.events.EventSelectClass;
 import ca.classe.classe_web.page.classe.events.EventSelectSubject;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.MouseEvents;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.Button;
@@ -38,6 +40,7 @@ public class ViewClassSelection extends ViewBaseImpl {
 	private String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 	private FileResource modifyIcon = new FileResource(new File(basepath + "/WEB-INF/images/icon_pencil.png"));
 	private Image modifyButton = new Image("", modifyIcon);
+	private ModifyButtonClickListener modifyButtonClickListener;
 	
 	public ViewClassSelection(BusEvenement busEvenement) {
 		super(busEvenement);
@@ -80,6 +83,7 @@ public class ViewClassSelection extends ViewBaseImpl {
 
 	private void initCmbClass() {
 		cmbClass.setEnabled(false);
+		cmbClass.setImmediate(true);
 		cmbClass.setContainerDataSource(bicClasse);
 		cmbClass.setItemCaptionPropertyId(Classe_.name.getName());
 		cmbClass.setInputPrompt("Classe");
@@ -103,6 +107,7 @@ public class ViewClassSelection extends ViewBaseImpl {
 	}
 
 	private void initCmbSubject() {
+		cmbSubject.setImmediate(true);
 		cmbSubject.setContainerDataSource(bicSubject);
 		cmbSubject.setItemCaptionPropertyId(Subject_.name.getName());
 		cmbSubject.setInputPrompt("Matière");
@@ -148,7 +153,25 @@ public class ViewClassSelection extends ViewBaseImpl {
 
 	public void showModifyLink(Classe classe) {
 		modifyButton.setVisible(classe != null);
-		// TODO enlever le listener précédent et en ajouter un nouveau au lien.
+		if (modifyButtonClickListener != null) {
+			modifyButton.removeClickListener(modifyButtonClickListener);		
+		}
+		modifyButtonClickListener = new ModifyButtonClickListener(classe);
+		modifyButton.addClickListener(modifyButtonClickListener);
 	}
 
+	private class ModifyButtonClickListener implements MouseEvents.ClickListener {
+
+		private static final long serialVersionUID = 7565274771817633910L;
+		private Classe classe;
+		
+		public ModifyButtonClickListener(Classe classe) {
+			this.classe = classe;
+		}
+
+		@Override
+		public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
+			busEvenement.notifier(new EventRequestClassModification(classe));
+		}
+	}
 }
