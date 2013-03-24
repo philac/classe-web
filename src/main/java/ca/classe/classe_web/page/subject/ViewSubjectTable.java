@@ -72,8 +72,9 @@ public class ViewSubjectTable extends ViewBaseImpl {
 	
 				@Override
 				public Object generateCell(Table source, Object itemId, Object columnId) {
-					
-					return new SwitchableComponentOnClick(busEvenement, new AssignableSubjectName((Subject) itemId), new SubjectModifyEvent(), ViewSubjectTable.this);
+					SwitchableComponentOnClick sc = new SwitchableComponentOnClick(busEvenement, new AssignableSubjectName((Subject) itemId), new SubjectModifyEvent());
+					sc.initComponent(ViewSubjectTable.this);
+					return sc;
 				}
 			});
 			table.addGeneratedColumn(Subject_.competencies.getName(), new ColumnGenerator() {

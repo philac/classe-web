@@ -7,6 +7,8 @@ import ca.classe.classe_modele.Classe;
 import ca.classe.classe_modele.Subject;
 import ca.classe.classe_service.commun.BusEvenement;
 import ca.classe.classe_web.mvp.PresenterBase;
+import ca.classe.classe_web.page.classe.events.CloseEvent;
+import ca.classe.classe_web.page.classe.events.EventModifyClass;
 import ca.classe.classe_web.page.classe.events.EventRequestAddClass;
 import ca.classe.classe_web.page.classe.events.EventRequestClassModification;
 import ca.classe.classe_web.page.classe.events.EventSelectClass;
@@ -19,11 +21,11 @@ import com.vaadin.ui.VerticalLayout;
 public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelection>
 	implements EventSelectSubject.Observer, EventSelectClass.Observer,
 	EventAddClass.Observer, EvenementCancel.Observer, EventRequestAddClass.Observer,
-	EventRequestClassModification.Ovserver {
+	EventRequestClassModification.Ovserver, EventModifyClass.Observer, CloseEvent.Observer {
 	
 	private ViewManageClassMarks viewManageClassMark;
-	private ViewModifyClass viewModifyClass;
 	private ViewAddClass viewAddClass;	
+	private ViewModifyClass viewModifyClass;
 	private VerticalLayout layout = new VerticalLayout();
 	
 	public PresenterClasses(ModelClass model, ViewClassSelection view,
@@ -43,6 +45,8 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 		busEvenement.observer(EvenementCancel.TYPE, this);
 		busEvenement.observer(EventAddClass.TYPE, this);
 		busEvenement.observer(EventRequestClassModification.TYPE, this);
+		busEvenement.observer(EventModifyClass.TYPE, this);
+		busEvenement.observer(CloseEvent.TYPE, this);
 	}
 
 	@Override
@@ -99,7 +103,21 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 	@Override
 	public void onRequestClassModification(Classe classe) {
 		viewModifyClass.setClasse(classe);
+		viewModifyClass.setSubjects(model.loadAllSubjects());
 		viewModifyClass.getLayout().setVisible(classe != null);
+		view.showModifyLink(null);
+		// TODO disabler les listes
+	}
+
+	@Override
+	public void onModifyClass(Classe classe) {
+		model.modifyClass(classe);
+	}
+
+	@Override
+	public void onClose(Object source, Classe classe) {
+		viewModifyClass.getLayout().setVisible(false);
+		view.showModifyLink(classe);
 	}
 
 }

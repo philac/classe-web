@@ -4,17 +4,18 @@ import ca.classe.classe_modele.Classe;
 import ca.classe.classe_service.commun.Evenement;
 import ca.classe.classe_service.commun.TypeEvenement;
 
-public class EventModifyClass implements
-		Evenement<EventModifyClass.Observer> {
+public class CloseEvent implements Evenement<CloseEvent.Observer> {
 
 	public interface Observer {
-		void onModifyClass(Classe classe);
+		void onClose(Object source, Classe classe);
 	}
-	
-	public static TypeEvenement<Observer> TYPE = new TypeEvenement<Observer>();
+
+	public static final TypeEvenement<Observer> TYPE = new TypeEvenement<CloseEvent.Observer>();
+	private Object source;
 	private Classe classe;
 
-	public EventModifyClass(Classe classe) {
+	public CloseEvent(Object source, Classe classe) {
+		this.source = source;
 		this.classe = classe;
 	}
 
@@ -25,7 +26,8 @@ public class EventModifyClass implements
 
 	@Override
 	public void notifierObservateur(Observer observateur) {
-		observateur.onModifyClass(classe);
+		observateur.onClose(source, classe);
+		
 	}
 
 }

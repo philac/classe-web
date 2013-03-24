@@ -34,15 +34,14 @@ public class SwitchableComponentOnClick extends HorizontalLayout {
 	private FileResource addIcon = new FileResource(new File(basepath + "/WEB-INF/images/plus.png"));
 	private Image addImage = new Image();
 	
-	public SwitchableComponentOnClick(BusEvenement busEvenement, AssignableFromSwitchableComponent assignable, ModifyEvent modifyEvent, Object source) {
+	public SwitchableComponentOnClick(BusEvenement busEvenement, AssignableFromSwitchableComponent assignable, ModifyEvent modifyEvent) {
 		this.busEvenement = busEvenement;
 		this.assignable = assignable;
 		this.modifyEvent = modifyEvent;
-		label.setValue(assignable.getValue());
-		initComponent(source);
 	}
 	
 	public void initComponent(final Object source) {
+		label.setValue(assignable.getValue());
 		addImage.setIcon(addIcon);
 		if (StringUtils.isNotBlank(assignable.getValue())) {
 			addComponent(label);

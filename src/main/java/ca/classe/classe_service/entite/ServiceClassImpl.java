@@ -25,4 +25,10 @@ public class ServiceClassImpl extends ServiceBaseImpl implements ServiceClass{
 	public void add(Classe classe) {
 		daoClass.ajouter(classe);
 	}
+	
+	@Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public void modify(Classe classe) {
+		daoClass.modifier(classe);
+	}
 }

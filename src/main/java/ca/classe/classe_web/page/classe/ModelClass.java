@@ -38,4 +38,7 @@ public class ModelClass extends ModelBaseImpl<ServiceClass> {
 		service.add(classe);
 	}
 
+	public void modifyClass(Classe classe) {
+		service.modify(classe);
+	}
 }

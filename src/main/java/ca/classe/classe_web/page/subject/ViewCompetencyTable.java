@@ -83,7 +83,9 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
-				return new SwitchableComponentOnClick(busEvenement, new AssignableCompetencyName((Competency) itemId), new CompetencyModifyEvent(), ViewCompetencyTable.this);
+				SwitchableComponentOnClick sc = new SwitchableComponentOnClick(busEvenement, new AssignableCompetencyName((Competency) itemId), new CompetencyModifyEvent());
+				sc.initComponent(ViewCompetencyTable.this);
+				return sc;
 			}
 		});
 		table.addGeneratedColumn(Competency_.description.getName(), new ColumnGenerator() {
@@ -92,7 +94,9 @@ public class ViewCompetencyTable extends ViewBaseImpl {
 
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
-				return new SwitchableComponentOnClick(busEvenement, new AssignableCompetencyDescription((Competency) itemId), new CompetencyModifyEvent(), ViewCompetencyTable.this);
+				SwitchableComponentOnClick sc = new SwitchableComponentOnClick(busEvenement, new AssignableCompetencyDescription((Competency) itemId), new CompetencyModifyEvent());
+				sc.initComponent(ViewCompetencyTable.this);
+				return sc;
 			}
 		});
 		table.addGeneratedColumn(Competency_.weight.getName(), new ColumnGenerator() {

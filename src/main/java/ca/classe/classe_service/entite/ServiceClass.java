@@ -7,4 +7,6 @@ public interface ServiceClass extends ServiceBase {
 
 	void add(Classe classe);
 
+	void modify(Classe classe);
+
 }
