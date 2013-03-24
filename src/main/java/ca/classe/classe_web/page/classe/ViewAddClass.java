@@ -84,6 +84,7 @@ public class ViewAddClass extends AddingView<Classe> {
 		nameField.setValue(null);
 		levelField.setValue(null);
 		subjectsCombobox.setValue(null);
+		bindData();
 	}
 
 	@Override

@@ -54,6 +54,7 @@ public class ViewAddCompetency extends AddingView<Competency> {
 	@Override
 	public void reinitFields() {
 		nameField.setValue(null);
+		bindData();
 	}
 
 	@Override

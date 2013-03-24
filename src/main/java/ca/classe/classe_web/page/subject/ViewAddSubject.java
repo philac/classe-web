@@ -53,6 +53,7 @@ public class ViewAddSubject extends AddingView<Subject> {
 	@Override
 	public void reinitFields() {
 		nameField.setValue(null);
+		bindData();
 	}
 
 }

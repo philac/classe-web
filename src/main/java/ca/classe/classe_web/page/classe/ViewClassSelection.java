@@ -110,8 +110,31 @@ public class ViewClassSelection extends ViewBaseImpl {
 	}
 
 	public void selectClass(Subject subject, Classe bean) {
-		cmbSubject.select(subject);
-		cmbClass.select(bean);
+		cmbSubject.select(findSubjectInCmb(subject));
+		cmbClass.select(findClasseInCmb(bean));
+	}
+	
+	private Subject findSubjectInCmb(Subject subject) {
+		for (Object s : cmbSubject.getItemIds()) {
+			if (s instanceof Subject) {
+				if (((Subject) s).getId().equals(subject.getId())) {
+					return (Subject) s;
+				}
+				
+			}
+		}
+		return null;
+	}
+	
+	private Classe findClasseInCmb(Classe classe) {
+		for (Object c : cmbClass.getItemIds()) {
+			if (c instanceof Classe) {
+				if (((Classe) c).getId().equals(classe.getId())) {
+					return (Classe) c;
+				}
+			}
+		}
+		return null;
 	}
 
 }
