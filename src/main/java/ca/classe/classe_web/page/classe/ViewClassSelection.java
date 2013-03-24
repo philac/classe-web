@@ -1,5 +1,6 @@
 package ca.classe.classe_web.page.classe;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -16,11 +17,14 @@ import ca.classe.classe_web.page.classe.events.EventSelectSubject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Layout;
 
 public class ViewClassSelection extends ViewBaseImpl {
@@ -31,13 +35,19 @@ public class ViewClassSelection extends ViewBaseImpl {
 	private Button btnAddClass = new Button();
 	private BeanItemContainer<Subject> bicSubject = new BeanItemContainer<Subject>(Subject.class);
 	private BeanItemContainer<Classe> bicClasse = new BeanItemContainer<Classe>(Classe.class);
+	private String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+	private FileResource modifyIcon = new FileResource(new File(basepath + "/WEB-INF/images/icon_pencil.png"));
+	private Image modifyButton = new Image("", modifyIcon);
 	
 	public ViewClassSelection(BusEvenement busEvenement) {
 		super(busEvenement);
+
 		layout.setSpacing(true);
 		
 		layout.addComponent(cmbSubject);
 		layout.addComponent(cmbClass);
+		layout.addComponent(modifyButton);
+		modifyButton.setVisible(false);
 		layout.addComponent(btnAddClass);
 	}
 
@@ -120,7 +130,6 @@ public class ViewClassSelection extends ViewBaseImpl {
 				if (((Subject) s).getId().equals(subject.getId())) {
 					return (Subject) s;
 				}
-				
 			}
 		}
 		return null;
@@ -135,6 +144,11 @@ public class ViewClassSelection extends ViewBaseImpl {
 			}
 		}
 		return null;
+	}
+
+	public void showModifyLink(Classe classe) {
+		modifyButton.setVisible(classe != null);
+		// TODO enlever le listener précédent et en ajouter un nouveau au lien.
 	}
 
 }

@@ -55,8 +55,7 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 
 	@Override
 	public void onSelectClass(Classe classe) {
-		// TODO Auto-generated method stub
-		
+		view.showModifyLink(classe);
 	}
 
 	@Override
