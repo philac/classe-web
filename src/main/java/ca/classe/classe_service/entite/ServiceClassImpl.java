@@ -31,4 +31,10 @@ public class ServiceClassImpl extends ServiceBaseImpl implements ServiceClass{
 	public void modify(Classe classe) {
 		daoClass.modifier(classe);
 	}
+	
+	@Override
+	public Classe loadClassWithSubjectAndCompetencies(Integer id) {
+		return daoClass.loadWithSubjectAndCompetencies(id);
+	}
+	
 }

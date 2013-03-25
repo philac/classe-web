@@ -9,4 +9,6 @@ public interface ServiceClass extends ServiceBase {
 
 	void modify(Classe classe);
 
+	Classe loadClassWithSubjectAndCompetencies(Integer id);
+
 }

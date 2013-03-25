@@ -41,4 +41,8 @@ public class ModelClass extends ModelBaseImpl<ServiceClass> {
 	public void modifyClass(Classe classe) {
 		service.modify(classe);
 	}
+
+	public Classe loadClassWithSubjectAndCompetencies(Integer id) {
+		return service.loadClassWithSubjectAndCompetencies(id);
+	}
 }

@@ -55,6 +55,8 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 		layout.addComponent(view.getLayout());
 		layout.addComponent(viewAddClass.getLayout());
 		layout.addComponent(viewModifyClass.getLayout());
+		layout.addComponent(viewManageClassMark.getLayout());
+		viewManageClassMark.setVisible(false);
 		viewModifyClass.getLayout().setVisible(false);
 		viewAddClass.setSubjects(model.loadAllSubjects());
 		viewAddClass.init();
@@ -75,6 +77,9 @@ public class PresenterClasses extends PresenterBase<ModelClass, ViewClassSelecti
 	@Override
 	public void onSelectClass(Classe classe) {
 		view.showModifyLink(classe);
+		classe = model.loadClassWithSubjectAndCompetencies(classe.getId());
+		viewManageClassMark.setClasse(classe);
+		viewManageClassMark.setVisible(true);
 	}
 
 	@Override
